@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Recherche avancée — Code pénal français</title>
+<meta name="description" content="Moteur de recherche avancé dans le Code pénal français. Syntaxe booléenne, recherche floue, filtres par facettes.">
+<style>
+:root{
+  --primary:#1E40AF;--primary-hover:#1D4ED8;--primary-dark:#1E3A8A;--primary-soft:#EFF6FF;
+  --accent:#B45309;--accent-soft:#FEF3C7;
+  --grey-950:#0F172A;--grey-900:#1E293B;--grey-800:#334155;--grey-700:#475569;
+  --grey-600:#64748B;--grey-500:#94A3B8;--grey-400:#CBD5E1;--grey-300:#E2E8F0;
+  --grey-200:#F1F5F9;--grey-100:#F8FAFC;--white:#FFFFFF;
+  --success:#047857;--success-bg:#D1FAE5;
+  --warning:#B45309;--warning-bg:#FEF3C7;
+  --error:#B91C1C;--error-bg:#FEE2E2;
+  --radius:6px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05);
+  --shadow-md:0 4px 12px rgba(15,23,42,.08);
+  --shadow-lg:0 10px 30px rgba(15,23,42,.12);
+  --font-main:"Inter","Segoe UI",Roboto,system-ui,-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono","Consolas",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-main);font-size:16px;line-height:1.5;
+  color:var(--grey-950);background:var(--white);-webkit-font-smoothing:antialiased;
+}
+button,input,select{font-family:inherit;font-size:inherit}
+a{color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--primary-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--primary);outline-offset:2px;border-radius:var(--radius);
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:10px 16px;text-decoration:none;z-index:1000;transition:top .2s}
+.skip-link:focus{top:0;color:#fff}
+kbd{
+  display:inline-block;padding:2px 6px;font-family:var(--font-mono);font-size:.72rem;
+  background:var(--grey-100);border:1px solid var(--grey-300);border-radius:4px;
+  color:var(--grey-700);box-shadow:0 1px 0 var(--grey-300);
+}
+
+/* HEADER */
+.site-header{background:var(--white);border-bottom:1px solid var(--grey-300);position:sticky;top:0;z-index:50}
+.site-header-inner{max-width:1400px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo-app{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;box-shadow:0 2px 8px rgba(30,64,175,.25)}
+.logo-text .name{font-weight:700;font-size:1rem;color:var(--grey-900);letter-spacing:-.01em}
+.logo-text .tagline{font-size:.74rem;color:var(--grey-600)}
+.site-nav{display:flex;gap:20px;align-items:center;font-size:.86rem}
+.site-nav a{color:var(--grey-700);text-decoration:none;font-weight:500}
+.site-nav a:hover{color:var(--primary)}
+.header-help{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--grey-500)}
+.info-bar{background:var(--grey-100);border-bottom:1px solid var(--grey-200);padding:6px 20px;font-size:.76rem;color:var(--grey-600);text-align:center}
+.info-bar strong{color:var(--grey-800)}
+
+/* LAYOUT */
+.layout{max-width:1400px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
+@media(max-width:1024px){.layout{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--grey-300);border-radius:3px}
+.side-card{background:var(--white);border:1px solid var(--grey-300);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+.side-card h3{font-size:.78rem;font-weight:700;color:var(--grey-700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.side-card h3 .count{margin-left:auto;font-size:.72rem;color:var(--grey-500);font-weight:600;background:var(--grey-100);padding:2px 8px;border-radius:10px}
+
+/* FACETTES */
+.facet-group{max-height:220px;overflow-y:auto;margin:-4px 0}
+.facet-group::-webkit-scrollbar{width:5px}
+.facet-group::-webkit-scrollbar-thumb{background:var(--grey-300);border-radius:3px}
+.facet-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:5px;cursor:pointer;font-size:.82rem;transition:background .1s;user-select:none}
+.facet-item:hover{background:var(--primary-soft)}
+.facet-item input{accent-color:var(--primary);cursor:pointer;width:14px;height:14px}
+.facet-item label{cursor:pointer;flex:1;color:var(--grey-800);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.facet-item .count{font-size:.72rem;color:var(--grey-500);font-weight:600;background:var(--grey-100);padding:1px 7px;border-radius:8px}
+.facet-item.active{background:var(--primary-soft)}
+.facet-item.active label{color:var(--primary);font-weight:600}
+
+/* MAIN */
+.main{min-width:0}
+
+/* BARRE DE RECHERCHE */
+.search-hero{
+  background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);
+  color:#fff;padding:28px 28px 32px;border-radius:12px;margin-bottom:20px;
+  box-shadow:0 8px 24px rgba(30,64,175,.2);position:relative;overflow:hidden;
+}
+.search-hero::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);pointer-events:none}
+.search-hero-inner{position:relative;z-index:1}
+.search-hero h1{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.search-hero p{font-size:.88rem;color:rgba(255,255,255,.82);margin-bottom:18px}
+
+.search-bar{position:relative}
+.search-input-wrap{position:relative;display:flex;align-items:center;background:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.search-input-wrap .icon-search{position:absolute;left:16px;width:20px;height:20px;color:var(--grey-500);pointer-events:none}
+.search-input{
+  width:100%;padding:14px 130px 14px 48px;border:0;background:transparent;
+  font-size:1rem;color:var(--grey-950);outline:none;border-radius:10px;
+}
+.search-input::placeholder{color:var(--grey-400)}
+.search-btn{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  padding:9px 20px;background:var(--primary);color:#fff;border:0;border-radius:7px;
+  font-weight:700;font-size:.86rem;cursor:pointer;transition:.15s;
+}
+.search-btn:hover{background:var(--primary-hover)}
+
+/* AUTOCOMPLETE */
+.autocomplete{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;
+  background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.15);
+  max-height:340px;overflow-y:auto;z-index:100;display:none;
+}
+.autocomplete.show{display:block}
+.autocomplete-section{padding:6px 0;border-bottom:1px solid var(--grey-200)}
+.autocomplete-section:last-child{border-bottom:0}
+.autocomplete-section-title{padding:4px 16px;font-size:.7rem;color:var(--grey-500);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.autocomplete-item{padding:9px 16px;cursor:pointer;font-size:.86rem;display:flex;align-items:center;gap:10px;color:var(--grey-800)}
+.autocomplete-item:hover,.autocomplete-item.selected{background:var(--primary-soft);color:var(--primary)}
+.autocomplete-item .ac-num{font-weight:700;color:var(--grey-900);min-width:70px}
+.autocomplete-item .ac-text{flex:1;color:var(--grey-600);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.autocomplete-item .ac-kind{font-size:.7rem;color:var(--grey-400);text-transform:uppercase;letter-spacing:.05em}
+
+/* SYNTAX HINT */
+.syntax-hint{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.76rem;color:rgba(255,255,255,.75)}
+.syntax-hint code{background:rgba(255,255,255,.12);padding:3px 8px;border-radius:4px;font-family:var(--font-mono);font-size:.72rem;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.1)}
+.syntax-hint code:hover{background:rgba(255,255,255,.2)}
+
+/* TOOLBAR */
+.toolbar{
+  background:#fff;border:1px solid var(--grey-300);border-radius:10px;padding:12px 16px;
+  margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;box-shadow:var(--shadow-sm);
+}
+.toolbar-label{font-size:.76rem;font-weight:700;color:var(--grey-600);text-transform:uppercase;letter-spacing:.05em}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+  border:1.5px solid var(--grey-300);background:#fff;border-radius:20px;
+  font-size:.8rem;font-weight:600;cursor:pointer;transition:.15s;color:var(--grey-700);
+}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 6px rgba(30,64,175,.2)}
+.toolbar-spacer{flex:1}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;padding:8px 14px;
+  border:0;border-radius:6px;font-weight:600;font-size:.82rem;cursor:pointer;
+  transition:.15s;white-space:nowrap;
+}
+.btn-secondary{background:#fff;color:var(--grey-800);border:1.5px solid var(--grey-300)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* STATUT */
+.status-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:.86rem;border-left:4px solid var(--primary);background:var(--primary-soft)}
+.status-banner.loading{border-left-color:var(--warning);background:var(--warning-bg)}
+.status-banner.ok{border-left-color:var(--success);background:var(--success-bg)}
+.status-banner.error{border-left-color:var(--error);background:var(--error-bg)}
+.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULTATS */
+.results-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;margin-bottom:12px;flex-wrap:wrap;gap:10px;
+  border-bottom:1px solid var(--grey-200);
+}
+.results-count{font-size:.86rem;color:var(--grey-600)}
+.results-count strong{color:var(--grey-950);font-weight:700}
+.sort-select{padding:6px 10px;border:1.5px solid var(--grey-300);border-radius:6px;font-size:.8rem;background:#fff;cursor:pointer;outline:none}
+.sort-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+
+.article{
+  background:#fff;border:1px solid var(--grey-300);border-left:4px solid var(--primary);
+  border-radius:8px;padding:18px 20px;margin-bottom:10px;transition:.15s;
+}
+.article:hover{box-shadow:var(--shadow-md);border-left-color:var(--primary-hover)}
+.article-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.article-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.article-number{font-size:1rem;font-weight:700;color:var(--grey-950);letter-spacing:-.01em}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:12px;font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.badge-success{background:var(--success-bg);color:var(--success)}
+.badge-error{background:var(--error-bg);color:var(--error)}
+.badge-info{background:var(--primary-soft);color:var(--primary)}
+.badge-score{background:var(--accent-soft);color:var(--accent)}
+.article-actions{display:flex;gap:6px}
+.icon-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:#fff;border:1.5px solid var(--grey-300);border-radius:5px;font-size:.72rem;font-weight:600;cursor:pointer;transition:.15s;color:var(--grey-600)}
+.icon-btn:hover{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.icon-btn.copied{background:var(--success-bg);border-color:var(--success);color:var(--success)}
+.icon-btn.starred{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.article-hierarchy{background:var(--grey-100);padding:6px 10px;border-radius:5px;font-size:.76rem;color:var(--grey-600);margin-bottom:10px}
+.article-text{font-size:.92rem;line-height:1.7;color:var(--grey-800);margin-bottom:10px}
+.article-text mark{background:var(--accent-soft);color:var(--accent);font-weight:600;padding:1px 3px;border-radius:2px}
+.article-meta{display:flex;gap:16px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--grey-200);font-size:.74rem;color:var(--grey-500)}
+
+/* SUGGESTIONS */
+.suggestions{margin-top:14px;padding:14px 16px;background:var(--grey-100);border-radius:8px;border-left:4px solid var(--accent)}
+.suggestions h4{font-size:.82rem;font-weight:700;color:var(--grey-800);margin-bottom:8px}
+.suggestions-list{display:flex;gap:8px;flex-wrap:wrap}
+.suggestion-btn{padding:6px 12px;background:#fff;border:1.5px solid var(--grey-300);border-radius:16px;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;color:var(--grey-700)}
+.suggestion-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;gap:6px;margin:24px 0;flex-wrap:wrap}
+.page-btn{min-width:38px;height:38px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1.5px solid var(--grey-300);border-radius:6px;cursor:pointer;font-size:.86rem;font-weight:600;color:var(--grey-700);transition:.15s}
+.page-btn:hover:not(:disabled):not(.active){background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.page-btn:disabled{opacity:.4;cursor:not-allowed}
+.page-sep{display:inline-flex;align-items:center;padding:0 4px;color:var(--grey-500)}
+
+/* ÉTAT VIDE */
+.empty-state{text-align:center;padding:50px 24px;background:var(--grey-100);border:1.5px dashed var(--grey-300);border-radius:10px;color:var(--grey-600)}
+.empty-state .icon{font-size:2.4rem;margin-bottom:12px;opacity:.5}
+.empty-state h3{font-size:1rem;font-weight:700;color:var(--grey-900);margin-bottom:6px}
+.empty-state p{font-size:.86rem;max-width:460px;margin:0 auto;line-height:1.6}
+
+/* AIDE SYNTAXE (MODALE) */
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--grey-200);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.modal-head h3{font-size:1.05rem;font-weight:700;color:var(--grey-900)}
+.modal-close{background:none;border:0;font-size:1.4rem;cursor:pointer;color:var(--grey-500);line-height:1;padding:4px 8px}
+.modal-close:hover{color:var(--grey-900)}
+.modal-body{padding:20px 22px}
+.modal-body h4{font-size:.86rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p,.modal-body li{font-size:.86rem;color:var(--grey-700);line-height:1.6}
+.modal-body ul{padding-left:20px;margin:6px 0}
+.modal-body li{margin:4px 0}
+.modal-body code{background:var(--grey-100);padding:2px 7px;border-radius:4px;font-family:var(--font-mono);font-size:.82rem;color:var(--accent);cursor:pointer;border:1px solid var(--grey-200)}
+.modal-body code:hover{background:var(--accent-soft)}
+.syntax-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.82rem}
+.syntax-table th,.syntax-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--grey-200)}
+.syntax-table th{background:var(--grey-100);font-weight:700;color:var(--grey-700);font-size:.76rem;text-transform:uppercase;letter-spacing:.04em}
+.syntax-table td:first-child{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);padding:12px 20px;border-radius:8px;background:var(--grey-950);color:#fff;font-size:.86rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:1000;opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:8px;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--success)}
+.toast.err{background:var(--error)}
+.toast.info{background:var(--primary)}
+
+/* FOOTER */
+.site-footer{background:var(--grey-100);border-top:1px solid var(--grey-200);padding:32px 20px 20px;margin-top:40px}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-bottom:24px}
+.footer-col h4{font-size:.76rem;font-weight:700;color:var(--grey-800);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:5px}
+.footer-col a{font-size:.82rem;color:var(--grey-600);text-decoration:none}
+.footer-col a:hover{color:var(--primary);text-decoration:underline}
+.footer-bottom{max-width:1400px;margin:0 auto;padding-top:18px;border-top:1px solid var(--grey-200);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.76rem;color:var(--grey-500)}
+
+@media(max-width:768px){
+  .search-hero{padding:20px 18px 24px}
+  .search-hero h1{font-size:1.15rem}
+  .search-input{padding:12px 96px 12px 42px;font-size:.94rem}
+  .search-btn{padding:8px 14px;font-size:.8rem}
+  .article{padding:14px}
+  .article-head{flex-direction:column;align-items:flex-start}
+  .layout{padding:16px}
+}
+@media print{
+  .site-header,.search-hero,.toolbar,.pagination,.site-footer,.article-actions,.toast,.info-bar,.sidebar,.status-banner,.suggestions,.results-bar .sort-select{display:none!important}
+  .layout{display:block}
+  .article{break-inside:avoid;border-left:2px solid #000;box-shadow:none}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<!-- HEADER -->
+<header class="site-header" role="banner">
+  <div class="site-header-inner">
+    <a href="#" class="logo-app">
+      <div class="logo-icon">⚖️</div>
+      <div class="logo-text">
+        <span class="name">Recherche Code pénal</span>
+        <span class="tagline">Moteur avancé — Outil non officiel</span>
+      </div>
+    </a>
+    <nav class="site-nav" aria-label="Navigation">
+      <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noopener">Légifrance</a>
+      <a href="https://www.data.gouv.fr" target="_blank" rel="noopener">data.gouv.fr</a>
+      <a href="#footer">À propos</a>
+    </nav>
+    <div class="header-help">
+      <span>Aide :</span>
+      <kbd>/</kbd>
+      <span>recherche</span>
+      <kbd>?</kbd>
+      <span>syntaxe</span>
+    </div>
+  </div>
+</header>
+
+<div class="info-bar">
+  <strong>Outil non officiel</strong> · Données ouvertes DILA sous Licence Ouverte 2.0
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR FACETTES -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-card">
+      <h3>📊 État <span class="count" id="facetEtatCount">—</span></h3>
+      <div class="facet-group" id="facetEtat" role="group" aria-label="Filtrer par état"></div>
+    </div>
+
+    <div class="side-card">
+      <h3>📖 Livre <span class="count" id="facetLivreCount">—</span></h3>
+      <div class="facet-group" id="facetLivre" role="group" aria-label="Filtrer par livre"></div>
+    </div>
+
+    <div class="side-card">
+      <h3>📑 Titre <span class="count" id="facetTitreCount">—</span></h3>
+      <div class="facet-group" id="facetTitre" role="group" aria-label="Filtrer par titre"></div>
+    </div>
+
+    <div class="side-card">
+      <h3>🔖 Mes favoris <span class="count" id="favorisCount">0</span></h3>
+      <div id="favorisList" style="font-size:.82rem;color:var(--grey-600);font-style:italic">Aucun favori</div>
+      <button class="btn btn-secondary" id="clearFavoris" style="width:100%;justify-content:center;margin-top:10px">Effacer les favoris</button>
+    </div>
+
+    <div class="side-card">
+      <h3>🕘 Historique</h3>
+      <div id="historyList" style="font-size:.82rem;color:var(--grey-600);font-style:italic">Aucune recherche</div>
+      <button class="btn btn-secondary" id="clearHistory" style="width:100%;justify-content:center;margin-top:10px">Effacer l'historique</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <!-- SEARCH HERO -->
+    <section class="search-hero" role="region" aria-label="Recherche">
+      <div class="search-hero-inner">
+        <h1>Recherche avancée dans le Code pénal</h1>
+        <p>Syntaxe booléenne · recherche floue · facettes · snippets</p>
+
+        <div class="search-bar">
+          <div class="search-input-wrap">
+            <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="search" id="searchInput" class="search-input"
+              placeholder='Ex: "vol avec violence" AND -mineur, corruption OR détournement…'
+              aria-label="Recherche" autocomplete="off" spellcheck="false"
+              role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="autocomplete">
+            <button type="button" class="search-btn" id="searchBtn">Rechercher</button>
+          </div>
+          <div class="autocomplete" id="autocomplete" role="listbox" aria-label="Suggestions"></div>
+        </div>
+
+        <div class="syntax-hint">
+          <code data-insert='vol'>vol</code>
+          <code data-insert='"vol avec violence"'>"phrase"</code>
+          <code data-insert='vol AND arme'>AND</code>
+          <code data-insert='vol OR extorsion'>OR</code>
+          <code data-insert='vol -mineur'>-exclure</code>
+          <code data-insert='cambrio*'>préfixe*</code>
+          <code data-insert='art:311-1'>art:numéro</code>
+          <button class="chip" id="helpBtn" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25);font-size:.72rem;padding:3px 10px">
+            ? Aide
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <span class="toolbar-label">Tri :</span>
+      <select class="sort-select" id="sortSelect" aria-label="Trier les résultats">
+        <option value="pertinence">Pertinence</option>
+        <option value="numero">Numéro d'article</option>
+        <option value="date-desc">Date (récent → ancien)</option>
+        <option value="date-asc">Date (ancien → récent)</option>
+        <option value="longueur">Longueur du texte</option>
+      </select>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-secondary" id="exportCsvBtn" disabled>📊 CSV</button>
+      <button class="btn btn-secondary" id="copyAllBtn" disabled>📋 Copier</button>
+      <button class="btn btn-secondary" id="shareBtn" disabled>🔗 Partager</button>
+      <button class="btn btn-secondary" id="printBtn">🖨️ Imprimer</button>
+    </div>
+
+    <!-- STATUT -->
+    <div id="status" class="status-banner loading" role="status" aria-live="polite">
+      <div class="spinner"></div>
+      <span>Chargement des articles du Code pénal…</span>
+    </div>
+
+    <!-- RESULTATS -->
+    <div class="results-bar" id="resultsBar" style="display:none">
+      <div class="results-count" id="resultsCount"></div>
+      <div style="font-size:.76rem;color:var(--grey-500)" id="resultsTime"></div>
+    </div>
+
+    <section id="results" aria-live="polite" aria-label="Résultats de recherche"></section>
+
+    <nav id="pagination" class="pagination" aria-label="Pagination"></nav>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Le Code pénal</h4>
+      <ul>
+        <li><a href="https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006070719/" target="_blank" rel="noopener">Texte officiel</a></li>
+        <li><a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006417211" target="_blank" rel="noopener">Article 111-1</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Données ouvertes</h4>
+      <ul>
+        <li><a href="https://www.data.gouv.fr" target="_blank" rel="noopener">data.gouv.fr</a></li>
+        <li><a href="https://www.dila.premier-ministre.gouv.fr" target="_blank" rel="noopener">DILA</a></li>
+        <li><a href="https://huggingface.co/datasets/louisbrulenaudet/code-penal" target="_blank" rel="noopener">Dataset utilisé</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <ul>
+        <li><a href="https://www.service-public.fr" target="_blank" rel="noopener">Service-Public.fr</a></li>
+        <li><a href="https://www.courdecassation.fr" target="_blank" rel="noopener">Cour de cassation</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Projet</h4>
+      <ul>
+        <li><a href="#">Code source</a></li>
+        <li><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">Licence MIT</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>⚖️ Outil pédagogique non officiel — Non affilié à l'État français</span>
+    <span>Données sous Licence Ouverte 2.0 (DILA)</span>
+  </div>
+</footer>
+
+<!-- MODALE AIDE -->
+<div class="modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="helpTitle">📖 Syntaxe de recherche avancée</h3>
+      <button class="modal-close" id="helpClose" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal-body">
+      <h4>Opérateurs</h4>
+      <table class="syntax-table">
+        <thead><tr><th>Syntaxe</th><th>Signification</th><th>Exemple</th></tr></thead>
+        <tbody>
+          <tr><td>mot1 mot2</td><td>Tous les mots (AND implicite)</td><td><code data-insert="vol arme">vol arme</code></td></tr>
+          <tr><td>"phrase exacte"</td><td>Expression exacte</td><td><code data-insert='"vol avec violence"'>"vol avec violence"</code></td></tr>
+          <tr><td>mot1 AND mot2</td><td>Les deux obligatoires</td><td><code data-insert="vol AND arme">vol AND arme</code></td></tr>
+          <tr><td>mot1 OR mot2</td><td>L'un ou l'autre</td><td><code data-insert="vol OR extorsion">vol OR extorsion</code></td></tr>
+          <tr><td>-mot</td><td>Exclure</td><td><code data-insert="vol -mineur">vol -mineur</code></td></tr>
+          <tr><td>préfixe*</td><td>Commence par</td><td><code data-insert="cambrio*">cambrio*</code></td></tr>
+          <tr><td>art:numéro</td><td>Numéro d'article exact</td><td><code data-insert="art:311-1">art:311-1</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Raccourcis clavier</h4>
+      <ul>
+        <li><kbd>/</kbd> : focus sur la barre de recherche</li>
+        <li><kbd>?</kbd> : ouvrir cette aide</li>
+        <li><kbd>Entrée</kbd> : lancer la recherche</li>
+        <li><kbd>Échap</kbd> : fermer les suggestions / la modale</li>
+        <li><kbd>Ctrl</kbd> + <kbd>K</kbd> : effacer la recherche</li>
+      </ul>
+
+      <h4>Recherche floue</h4>
+      <p>Si aucun résultat exact n'est trouvé, le moteur tente automatiquement une correction orthographique (distance de Levenshtein ≤ 2).</p>
+
+      <h4>Filtres par facettes</h4>
+      <p>Utilisez les cases à cocher dans la barre latérale pour affiner par <strong>état</strong>, <strong>livre</strong> ou <strong>titre</strong>. Les compteurs se mettent à jour dynamiquement.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+<script>
+/* =========================================================================
+   CONFIGURATION
+   ========================================================================= */
+const HF_API = 'https://datasets-server.huggingface.co/rows';
+const DATASET = 'louisbrulenaudet/code-penal';
+const CONFIG = 'default';
+const SPLIT = 'train';
+const BATCH = 100;
+const PER_PAGE = 20;
+
+const LS = {
+  history: 'cp_history_v1',
+  favoris: 'cp_favoris_v1',
+  facets:  'cp_facets_v1'
+};
+const HISTORY_MAX = 15;
+
+/* =========================================================================
+   ÉTAT
+   ========================================================================= */
+const state = {
+  articles: [],
+  filtered: [],
+  // requête parsée
+  parsed: { must:[], mustNot:[], should:[], phrases:[], prefix:[], numero:null, raw:'' },
+  query: '',
+  // facettes
+  facets: {
+    etat: new Set(),   // {VIGUEUR, ABROGE}
+    livre: new Set(),
+    titre: new Set()
+  },
+  // facettes disponibles calculées
+  facetsAvailable: { etat:{}, livre:{}, titre:{} },
+  sort: 'pertinence',
+  page: 1,
+  loaded: false,
+  history: [],
+  favoris: new Set()
+};
+
+/* =========================================================================
+   HELPERS
+   ========================================================================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s||'').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+/** Normalise : minuscules + suppression accents */
+function normalize(str){
+  return String(str||'')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+/** Highlight tous les termes trouvés dans le texte */
+function highlight(text, parsed){
+  const safe = esc(text);
+  const terms = new Set();
+  parsed.must.forEach(t => terms.add(t));
+  parsed.should.forEach(t => terms.add(t));
+  parsed.phrases.forEach(t => terms.add(t));
+  parsed.prefix.forEach(t => terms.add(t));
+
+  if(!terms.size) return safe;
+
+  let out = safe;
+  Array.from(terms).sort((a,b) => b.length - a.length).forEach(term => {
+    if(term.length < 2) return;
+    // Escape regex
+    const t = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match accents-insensitive
+    const re = new RegExp(buildAccentInsensitiveRegex(t), 'gi');
+    out = out.replace(re, m => '<mark>' + m + '</mark>');
+  });
+  return out;
+}
+
+/** Regex insensible aux accents */
+function buildAccentInsensitiveRegex(str){
+  const map = {'a':'[aàâä]','e':'[eéèêë]','i':'[iîï]','o':'[oôö]','u':'[uùûü]','c':'[cç]','y':'[yÿ]'};
+  return str.split('').map(ch => {
+    const lower = ch.toLowerCase();
+    return map[lower] || ch;
+  }).join('');
+}
+
+/** Levenshtein */
+function levenshtein(a, b){
+  a = normalize(a); b = normalize(b);
+  if(a === b) return 0;
+  if(!a.length) return b.length;
+  if(!b.length) return a.length;
+  const m = a.length, n = b.length;
+  let prev = Array.from({length:n+1}, (_, i) => i);
+  for(let i=1; i<=m; i++){
+    const cur = [i];
+    for(let j=1; j<=n; j++){
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      cur[j] = Math.min(cur[j-1]+1, prev[j]+1, prev[j-1]+cost);
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+
+let toastTimer = null;
+function showToast(msg, type = 'info'){
+  const el = $('toast');
+  el.className = 'toast show ' + type;
+  el.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 2600);
+}
+
+/* =========================================================================
+   PARSER DE REQUÊTE
+   ========================================================================= */
+/**
+ * Grammaire supportée :
+ *   - mot1 mot2           → must: [mot1, mot2]
+ *   - "phrase exacte"     → phrases: [phrase exacte]
+ *   - mot1 AND mot2       → must
+ *   - mot1 OR mot2        → should
+ *   - mot1 NOT mot2 / -mot2 → mustNot
+ *   - préfixe*            → prefix
+ *   - art:311-1 / num:311-1 → numero
+ */
+function parseQuery(raw){
+  const parsed = { must:[], mustNot:[], should:[], phrases:[], prefix:[], numero:null, raw:raw.trim() };
+  if(!parsed.raw) return parsed;
+
+  const tokens = tokenize(raw);
+  let currentOp = 'AND';
+  let expectingOperand = true;
+
+  for(const tk of tokens){
+    if(tk.type === 'op'){
+      currentOp = tk.value;
+      expectingOperand = true;
+      continue;
+    }
+    const val = tk.value.trim();
+    if(!val) continue;
+
+    // Détection art: / num:
+    const artMatch = val.match(/^(?:art|num|article):(.+)$/i);
+    if(artMatch){
+      parsed.numero = artMatch[1].trim();
+      expectingOperand = false;
+      continue;
+    }
+
+    // Préfixe *
+    if(tk.type === 'term' && val.endsWith('*') && val.length > 1){
+      const p = val.slice(0, -1).toLowerCase();
+      if(currentOp === 'NOT') parsed.mustNot.push(p);
+      else parsed.prefix.push(p);
+      currentOp = 'AND';
+      expectingOperand = false;
+      continue;
+    }
+
+    // Phrase
+    if(tk.type === 'phrase'){
+      const p = val.toLowerCase();
+      if(currentOp === 'NOT') parsed.mustNot.push(p);
+      else parsed.phrases.push(p);
+      currentOp = 'AND';
+      expectingOperand = false;
+      continue;
+    }
+
+    // Terme simple
+    const t = val.toLowerCase();
+    if(currentOp === 'NOT') parsed.mustNot.push(t);
+    else if(currentOp === 'OR') parsed.should.push(t);
+    else parsed.must.push(t);
+
+    currentOp = 'AND';
+    expectingOperand = false;
+  }
+  return parsed;
+}
+
+function tokenize(q){
+  const tokens = [];
+  let i = 0;
+  const n = q.length;
+
+  while(i < n){
+    // Skip whitespace
+    while(i < n && /\s/.test(q[i])) i++;
+    if(i >= n) break;
+
+    // Check operators (word boundary)
+    const rest = q.slice(i).toUpperCase();
+    if(rest.match(/^(AND|OR|NOT)\b/)){
+      const op = rest.match(/^(AND|OR|NOT)\b/)[1];
+      tokens.push({ type:'op', value:op });
+      i += op.length;
+      continue;
+    }
+
+    // Leading minus = NOT
+    if(q[i] === '-'){
+      tokens.push({ type:'op', value:'NOT' });
+      i++;
+      continue;
+    }
+
+    // Quoted phrase
+    if(q[i] === '"'){
+      const end = q.indexOf('"', i + 1);
+      if(end > i){
+        tokens.push({ type:'phrase', value: q.slice(i + 1, end) });
+        i = end + 1;
+        continue;
+      }
+    }
+
+    // Regular term
+    let term = '';
+    while(i < n && !/\s/.test(q[i]) && q[i] !== '"'){
+      term += q[i++];
+    }
+    if(term) tokens.push({ type:'term', value: term });
+  }
+  return tokens;
+}
+
+/* =========================================================================
+   SCORING (BM25-like)
+   ========================================================================= */
+const K1 = 1.2;
+const B = 0.75;
+
+function scoreArticle(article, parsed){
+  // Filtres numéro
+  if(parsed.numero){
+    const numClean = article.num.replace(/\./g,'').replace(/\s/g,'').toLowerCase();
+    const qClean = parsed.numero.replace(/\./g,'').replace(/\s/g,'').toLowerCase();
+    if(numClean === qClean) return 1000;
+    if(numClean.startsWith(qClean)) return 500;
+    return 0;
+  }
+
+  const textNorm = normalize(article.texte);
+  const titleNorm = normalize(article.titre + ' ' + article.hierarchie);
+  const numNorm = normalize(article.num);
+  const docLen = textNorm.split(/\s+/).length;
+  const avgLen = 80;   // approximation
+
+  let score = 0;
+
+  // Mots obligatoires (must) : tous doivent être présents
+  for(const term of parsed.must){
+    const inText = countOccurrences(textNorm, term);
+    const inTitle = countOccurrences(titleNorm, term);
+    const inNum = countOccurrences(numNorm, term);
+    if(inText + inTitle + inNum === 0) return 0;
+
+    const tf = inText + inTitle * 3 + inNum * 5;
+    const idf = 1; // pas d'IDF réel ici (tout terme rare compte pareil)
+    score += idf * (tf * (K1 + 1)) / (tf + K1 * (1 - B + B * (docLen / avgLen)));
+  }
+
+  // Phrases : doivent être présentes textuellement
+  for(const phrase of parsed.phrases){
+    const p = normalize(phrase);
+    if(textNorm.includes(p) || titleNorm.includes(p)){
+      score += 50;
+    } else {
+      return 0;   // phrase obligatoire
+    }
+  }
+
+  // Préfixes
+  for(const prefix of parsed.prefix){
+    const p = normalize(prefix);
+    const re = new RegExp('\\b' + p, 'i');
+    if(!re.test(textNorm) && !re.test(titleNorm) && !re.test(numNorm)) return 0;
+    score += 10;
+  }
+
+  // Mots optionnels (OR) : bonus si présents
+  if(parsed.should.length){
+    let anyMatch = false;
+    for(const term of parsed.should){
+      const tf = countOccurrences(textNorm, term) + countOccurrences(titleNorm, term) * 3;
+      if(tf > 0){ anyMatch = true; score += tf * 2; }
+    }
+    if(!anyMatch && parsed.must.length === 0 && parsed.phrases.length === 0) return 0;
+  }
+
+  // Mots à exclure
+  for(const term of parsed.mustNot){
+    if(textNorm.includes(term) || titleNorm.includes(term) || numNorm.includes(term)) return 0;
+  }
+
+  return score;
+}
+
+function countOccurrences(haystack, needle){
+  if(!needle) return 0;
+  let count = 0;
+  let idx = 0;
+  while((idx = haystack.indexOf(needle, idx)) !== -1){
+    count++;
+    idx += needle.length;
+  }
+  return count;
+}
+
+/* =========================================================================
+   RECHERCHE FLOUE
+   ========================================================================= */
+/** Cherche les termes flous dans un mot unique : renvoie le terme corrigé ou null */
+function fuzzyCorrect(term, dictionary){
+  let best = null, bestDist = 3;
+  const t = normalize(term);
+  if(t.length < 3) return null;
+  const maxDist = t.length <= 5 ? 1 : 2;
+  for(const word of dictionary){
+    if(Math.abs(word.length - t.length) > maxDist) continue;
+    const d = levenshtein(t, word);
+    if(d < bestDist && d <= maxDist){
+      bestDist = d;
+      best = word;
+    }
+  }
+  return best;
+}
+
+/* =========================================================================
+   SNIPPET
+   ========================================================================= */
+function extractSnippet(text, parsed, length = 260){
+  const plain = String(text||'').trim();
+  if(plain.length <= length) return plain;
+
+  const normText = normalize(plain);
+  const allTerms = [...parsed.must, ...parsed.should, ...parsed.phrases, ...parsed.prefix];
+  if(!allTerms.length) return plain.slice(0, length) + '…';
+
+  let bestPos = 0;
+  let bestCount = 0;
+
+  // Fenêtre glissante
+  for(let i = 0; i < normText.length - length; i += 20){
+    const win = normText.slice(i, i + length);
+    let c = 0;
+    for(const term of allTerms){
+      if(win.includes(normalize(term))) c++;
+    }
+    if(c > bestCount){ bestCount = c; bestPos = i; }
+  }
+
+  let snip = plain.slice(bestPos, bestPos + length);
+  if(bestPos > 0) snip = '…' + snip;
+  if(bestPos + length < plain.length) snip = snip + '…';
+  return snip;
+}
+
+/* =========================================================================
+   CHARGEMENT
+   ========================================================================= */
+async function loadArticles(){
+  if(state.loaded) return;
+  setStatus('loading', 'Chargement des articles du Code pénal…');
+
+  try {
+    let all = [], offset = 0, total = Infinity;
+    while(offset < total){
+      const url = `${HF_API}?dataset=${encodeURIComponent(DATASET)}&config=${CONFIG}&split=${SPLIT}&offset=${offset}&length=${BATCH}`;
+      const resp = await fetch(url);
+      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      total = data.num_rows_total || 0;
+      const rows = data.rows || [];
+      if(!rows.length) break;
+
+      rows.forEach(r => {
+        const a = r.row;
+        const hier = a.sectionParentTitre || '';
+        all.push({
+          num: a.num || '',
+          texte: a.texte || '',
+          titre: a.title_main || '',
+          etat: a.etat || 'VIGUEUR',
+          hierarchie: hier,
+          livre: extractLivre(hier),
+          titreHier: extractTitre(hier),
+          dateDebut: a.dateDebut || 0,
+          ref: a.ref || ''
+        });
+      });
+
+      offset += rows.length;
+      setStatus('loading', `Chargement… ${all.length} articles récupérés`);
+      if(rows.length < BATCH) break;
+    }
+
+    all.sort((a,b) => {
+      const na = parseNum(a.num), nb = parseNum(b.num);
+      if(na.major !== nb.major) return na.major - nb.major;
+      if(na.minor !== nb.minor) return na.minor - nb.minor;
+      return (na.suffix||'').localeCompare(nb.suffix||'');
+    });
+
+    state.articles = all;
+    state.loaded = true;
+
+    computeFacetsAvailable();
+    renderFacets();
+    setStatus('ok', `${all.length} articles chargés — ${all.filter(a=>a.etat==='VIGUEUR').length} en vigueur`);
+    doSearch();
+  } catch(err){
+    console.error(err);
+    setStatus('error', `Erreur : ${err.message}`);
+    $('results').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><h3>Impossible de charger les données</h3><p>Vérifiez votre connexion internet.</p></div>`;
+  }
+}
+
+function parseNum(num){
+  const m = String(num).match(/^([RLD]?\.?\s*)(\d+)-(\d+)(.*)$/);
+  if(!m) return { major:0, minor:0, suffix:String(num) };
+  return { major: parseInt(m[2]), minor: parseInt(m[3]), suffix: (m[1]||'')+(m[4]||'') };
+}
+
+function extractLivre(h){
+  if(!h) return '';
+  const m = String(h).match(/(Livre\s+[IVXLC]+[a-z]*)/i);
+  return m ? m[1].trim() : '';
+}
+function extractTitre(h){
+  if(!h) return '';
+  const m = String(h).match(/(Titre\s+[IVXLC]+[a-z]*)/i);
+  return m ? m[1].trim() : '';
+}
+
+/* =========================================================================
+   FACETTES
+   ========================================================================= */
+function computeFacetsAvailable(){
+  const etat = {}, livre = {}, titre = {};
+  state.articles.forEach(a => {
+    etat[a.etat] = (etat[a.etat]||0) + 1;
+    if(a.livre) livre[a.livre] = (livre[a.livre]||0) + 1;
+    if(a.titreHier) titre[a.titreHier] = (titre[a.titreHier]||0) + 1;
+  });
+  state.facetsAvailable = { etat, livre, titre };
+}
+
+function renderFacets(){
+  renderFacetGroup('facetEtat', 'etat', state.facetsAvailable.etat);
+  renderFacetGroup('facetLivre', 'livre', state.facetsAvailable.livre);
+  renderFacetGroup('facetTitre', 'titre', state.facetsAvailable.titre);
+  $('facetEtatCount').textContent = Object.keys(state.facetsAvailable.etat).length;
+  $('facetLivreCount').textContent = Object.keys(state.facetsAvailable.livre).length;
+  $('facetTitreCount').textContent = Object.keys(state.facetsAvailable.titre).length;
+}
+
+function renderFacetGroup(hostId, facetKey, counts){
+  const host = $(hostId);
+  const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+  if(!entries.length){ host.innerHTML = '<p style="font-size:.78rem;color:var(--grey-500);font-style:italic">Aucune valeur</p>'; return; }
+
+  host.innerHTML = entries.map(([val, count]) => {
+    const id = `${facetKey}-${btoa(unescape(encodeURIComponent(val))).slice(0,10)}`;
+    const checked = state.facets[facetKey].has(val);
+    return `
+      <div class="facet-item ${checked ? 'active' : ''}">
+        <input type="checkbox" id="${id}" data-facet="${facetKey}" data-value="${esc(val)}" ${checked ? 'checked' : ''}>
+        <label for="${id}" title="${esc(val)}">${esc(val)}</label>
+        <span class="count">${count}</span>
+      </div>`;
+  }).join('');
+
+  host.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const fk = cb.dataset.facet;
+      const val = cb.dataset.value;
+      if(cb.checked) state.facets[fk].add(val);
+      else state.facets[fk].delete(val);
+      state.page = 1;
+      doSearch();
+      renderFacets();
+    });
+  });
+}
+
+/* =========================================================================
+   HISTORIQUE & FAVORIS
+   ========================================================================= */
+function loadHistory(){
+  try { state.history = JSON.parse(localStorage.getItem(LS.history) || '[]'); } catch(e){ state.history = []; }
+}
+function saveHistory(){
+  try { localStorage.setItem(LS.history, JSON.stringify(state.history)); } catch(e){}
+}
+function addToHistory(q){
+  q = String(q||'').trim();
+  if(q.length < 2) return;
+  state.history = state.history.filter(h => h.q !== q);
+  state.history.unshift({ q, date: Date.now() });
+  if(state.history.length > HISTORY_MAX) state.history = state.history.slice(0, HISTORY_MAX);
+  saveHistory();
+  renderHistory();
+}
+function renderHistory(){
+  const host = $('historyList');
+  if(!state.history.length){ host.innerHTML = '<em style="color:var(--grey-500)">Aucune recherche</em>'; return; }
+  host.innerHTML = state.history.map(h => `
+    <div class="facet-item" style="padding:4px 6px">
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;font-size:.8rem" data-hist="${esc(h.q)}">🔍 ${esc(h.q)}</span>
+      <span class="x" data-hist-remove="${esc(h.q)}" style="cursor:pointer;color:var(--grey-400);font-weight:700;padding:0 4px" title="Supprimer">×</span>
+    </div>`).join('');
+
+  host.querySelectorAll('[data-hist]').forEach(el => {
+    el.addEventListener('click', () => {
+      $('searchInput').value = el.dataset.hist;
+      state.query = el.dataset.hist;
+      doSearch();
+    });
+  });
+  host.querySelectorAll('[data-hist-remove]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      state.history = state.history.filter(h => h.q !== el.dataset.histRemove);
+      saveHistory();
+      renderHistory();
+    });
+  });
+}
+
+function loadFavoris(){
+  try { state.favoris = new Set(JSON.parse(localStorage.getItem(LS.favoris) || '[]')); } catch(e){ state.favoris = new Set(); }
+}
+function saveFavoris(){
+  try { localStorage.setItem(LS.favoris, JSON.stringify(Array.from(state.favoris))); } catch(e){}
+}
+function toggleFavori(num){
+  if(state.favoris.has(num)){ state.favoris.delete(num); showToast('Retiré des favoris', 'info'); }
+  else { state.favoris.add(num); showToast('Ajouté aux favoris', 'ok'); }
+  saveFavoris();
+  renderFavoris();
+  renderResults();
+}
+function renderFavoris(){
+  const host = $('favorisList');
+  $('favorisCount').textContent = state.favoris.size;
+  if(!state.favoris.size){ host.innerHTML = '<em style="color:var(--grey-500)">Aucun favori</em>'; return; }
+  host.innerHTML = Array.from(state.favoris).map(num => `
+    <div class="facet-item" style="padding:4px 6px">
+      <span style="flex:1;cursor:pointer;font-size:.8rem" data-fav="${esc(num)}">⭐ ${esc(num)}</span>
+      <span style="cursor:pointer;color:var(--grey-400);font-weight:700;padding:0 4px" data-fav-remove="${esc(num)}" title="Retirer">×</span>
+    </div>`).join('');
+  host.querySelectorAll('[data-fav]').forEach(el => {
+    el.addEventListener('click', () => {
+      $('searchInput').value = 'art:' + el.dataset.fav;
+      state.query = 'art:' + el.dataset.fav;
+      doSearch();
+    });
+  });
+  host.querySelectorAll('[data-fav-remove]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleFavori(el.dataset.favRemove);
+    });
+  });
+}
+
+/* =========================================================================
+   RECHERCHE
+   ========================================================================= */
+function doSearch(){
+  if(!state.loaded) return;
+  const t0 = performance.now();
+
+  state.parsed = parseQuery(state.query);
+  const list = [];
+
+  for(const art of state.articles){
+    // Filtres facettes
+    if(state.facets.etat.size && !state.facets.etat.has(art.etat)) continue;
+    if(state.facets.livre.size && !state.facets.livre.has(art.livre)) continue;
+    if(state.facets.titre.size && !state.facets.titre.has(art.titreHier)) continue;
+
+    // Score
+    const score = scoreArticle(art, state.parsed);
+    if(score > 0){
+      list.push({ ...art, _score: score });
+    }
+  }
+
+  // Fallback flou si 0 résultats avec must
+  if(!list.length && state.parsed.must.length && !state.parsed.numero){
+    const dict = buildDictionary();
+    const corrected = [];
+    for(const t of state.parsed.must){
+      const c = fuzzyCorrect(t, dict);
+      if(c) corrected.push(c);
+    }
+    if(corrected.length){
+      const altParsed = { ...state.parsed, must: corrected };
+      for(const art of state.articles){
+        if(state.facets.etat.size && !state.facets.etat.has(art.etat)) continue;
+        if(state.facets.livre.size && !state.facets.livre.has(art.livre)) continue;
+        if(state.facets.titre.size && !state.facets.titre.has(art.titreHier)) continue;
+        const s = scoreArticle(art, altParsed);
+        if(s > 0) list.push({ ...art, _score: s * 0.8, _fuzzy: corrected });
+      }
+      if(list.length){
+        showToast(`Recherche floue : « ${corrected.join(', ')} »`, 'info');
+      }
+    }
+  }
+
+  // Tri
+  applySort(list);
+
+  state.filtered = list;
+  state.page = 1;
+
+  if(state.query.trim().length >= 2) addToHistory(state.query);
+
+  const elapsed = (performance.now() - t0).toFixed(0);
+  renderResults(elapsed);
+  updateToolbar();
+  syncURL();
+}
+
+function buildDictionary(){
+  const words = new Set();
+  state.articles.forEach(a => {
+    normalize(a.texte).split(/\s+/).forEach(w => {
+      if(w.length >= 4 && w.length <= 20) words.add(w);
+    });
+  });
+  return Array.from(words);
+}
+
+function applySort(list){
+  const s = state.sort;
+  if(s === 'pertinence') list.sort((a,b) => b._score - a._score);
+  else if(s === 'numero'){
+    list.sort((a,b) => {
+      const na = parseNum(a.num), nb = parseNum(b.num);
+      if(na.major !== nb.major) return na.major - nb.major;
+      return na.minor - nb.minor;
+    });
+  }
+  else if(s === 'date-desc') list.sort((a,b) => (b.dateDebut||0) - (a.dateDebut||0));
+  else if(s === 'date-asc') list.sort((a,b) => (a.dateDebut||0) - (b.dateDebut||0));
+  else if(s === 'longueur') list.sort((a,b) => (b.texte||'').length - (a.texte||'').length);
+}
+
+/* =========================================================================
+   RENDU
+   ========================================================================= */
+function renderResults(elapsed){
+  const host = $('results');
+  const bar = $('resultsBar');
+  const list = state.filtered;
+
+  if(!list.length){
+    bar.style.display = 'none';
+    host.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>Aucun article ne correspond à votre recherche</h3>
+        <p>Essayez :</p>
+        <div class="suggestions-list" style="justify-content:center;margin-top:12px">
+          <button class="suggestion-btn" data-suggest="vol">vol</button>
+          <button class="suggestion-btn" data-suggest="violence">violence</button>
+          <button class="suggestion-btn" data-suggest="corruption">corruption</button>
+          <button class="suggestion-btn" data-suggest="art:111-1">art:111-1</button>
+        </div>
+      </div>`;
+    host.querySelectorAll('[data-suggest]').forEach(b => {
+      b.addEventListener('click', () => {
+        $('searchInput').value = b.dataset.suggest;
+        state.query = b.dataset.suggest;
+        doSearch();
+      });
+    });
+    $('pagination').innerHTML = '';
+    return;
+  }
+
+  const totalPages = Math.ceil(list.length / PER_PAGE);
+  const start = (state.page - 1) * PER_PAGE;
+  const slice = list.slice(start, start + PER_PAGE);
+
+  bar.style.display = 'flex';
+  $('resultsCount').innerHTML = `<strong>${list.length.toLocaleString('fr-FR')}</strong> ${list.length > 1 ? 'articles' : 'article'} trouvé${list.length > 1 ? 's' : ''}${totalPages > 1 ? ` — page ${state.page} / ${totalPages}` : ''}`;
+  $('resultsTime').textContent = elapsed ? `Recherche en ${elapsed} ms` : '';
+
+  host.innerHTML = slice.map((a, i) => renderArticle(a, start + i)).join('');
+
+  host.querySelectorAll('.icon-btn[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => copyArticle(btn.dataset.copy, btn));
+  });
+  host.querySelectorAll('.icon-btn[data-fav]').forEach(btn => {
+    btn.addEventListener('click', () => toggleFavori(btn.dataset.fav));
+  });
+
+  renderPagination(totalPages);
+}
+
+function renderArticle(a, idx){
+  const badge = a.etat === 'VIGUEUR'
+    ? '<span class="badge badge-success">● En vigueur</span>'
+    : '<span class="badge badge-error">● Abrogé</span>';
+  const scoreBadge = a._score >= 100 ? '' : '';
+  const dateStr = a.dateDebut
+    ? new Date(a.dateDebut * 1000).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
+    : '';
+
+  const snippet = extractSnippet(a.texte, state.parsed, 280);
+  const isFav = state.favoris.has(a.num);
+
+  return `
+    <article class="article" aria-labelledby="art-${idx}">
+      <div class="article-head">
+        <div class="article-title">
+          <h3 class="article-number" id="art-${idx}">Article ${esc(a.num)}</h3>
+          ${badge}
+        </div>
+        <div class="article-actions">
+          <button class="icon-btn ${isFav ? 'starred' : ''}" data-fav="${esc(a.num)}" aria-label="Ajouter aux favoris">
+            ${isFav ? '⭐' : '☆'} Favori
+          </button>
+          <button class="icon-btn" data-copy="${idx}" aria-label="Copier">
+            📋 Copier
+          </button>
+        </div>
+      </div>
+      ${a.hierarchie ? `<div class="article-hierarchy">📚 ${esc(a.hierarchie)}</div>` : ''}
+      <div class="article-text">${highlight(snippet, state.parsed)}</div>
+      <div class="article-meta">
+        ${dateStr ? `<span>📅 En vigueur depuis le ${dateStr}</span>` : ''}
+        ${a.ref ? `<span>🔗 ${esc(a.ref)}</span>` : ''}
+      </div>
+    </article>`;
+}
+
+function renderPagination(totalPages){
+  const host = $('pagination');
+  if(totalPages <= 1){ host.innerHTML = ''; return; }
+  const p = state.page;
+  let html = `<button class="page-btn" data-page="${p-1}" ${p===1?'disabled':''} aria-label="Précédent">‹</button>`;
+  const pages = new Set([1, totalPages, p]);
+  for(let i = Math.max(1, p-2); i <= Math.min(totalPages, p+2); i++) pages.add(i);
+  const sorted = Array.from(pages).sort((a,b) => a-b);
+  let last = 0;
+  sorted.forEach(n => {
+    if(last && n - last > 1) html += `<span class="page-sep">…</span>`;
+    html += `<button class="page-btn ${n===p?'active':''}" data-page="${n}" ${n===p?'aria-current="page"':''}>${n}</button>`;
+    last = n;
+  });
+  html += `<button class="page-btn" data-page="${p+1}" ${p===totalPages?'disabled':''} aria-label="Suivant">›</button>`;
+  host.innerHTML = html;
+
+  host.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = parseInt(btn.dataset.page);
+      if(t < 1 || t > totalPages) return;
+      state.page = t;
+      renderResults();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+}
+
+/* =========================================================================
+   UI HELPERS
+   ========================================================================= */
+function setStatus(type, msg){
+  const el = $('status');
+  el.className = 'status-banner ' + type;
+  const icon = type === 'loading' ? '<div class="spinner"></div>'
+             : type === 'ok' ? '<span>✅</span>'
+             : type === 'error' ? '<span>⚠️</span>'
+             : '<span>ℹ️</span>';
+  el.innerHTML = `${icon}<span>${esc(msg)}</span>`;
+}
+
+function updateToolbar(){
+  const has = state.filtered.length > 0;
+  $('exportCsvBtn').disabled = !has;
+  $('copyAllBtn').disabled = !has;
+  $('shareBtn').disabled = !has;
+}
+
+/* =========================================================================
+   AUTOCOMPLETE
+   ========================================================================= */
+let acSelectedIdx = -1;
+let acItems = [];
+
+function showAutocomplete(){
+  const q = $('searchInput').value.trim();
+  const host = $('autocomplete');
+  if(!state.loaded || q.length < 2){ host.classList.remove('show'); return; }
+
+  const items = [];
+  const normQ = normalize(q);
+
+  // Numéros d'articles
+  const numMatches = state.articles
+    .filter(a => a.num.toLowerCase().includes(q.toLowerCase()))
+    .slice(0, 5);
+  numMatches.forEach(a => items.push({ kind:'num', label:`Article ${a.num}`, sub:a.titre, insert:a.num }));
+
+  // Termes fréquents
+  const wordMap = {};
+  state.articles.forEach(a => {
+    normalize(a.texte).split(/\s+/).forEach(w => {
+      if(w.length >= 4 && w.startsWith(normQ)){
+        wordMap[w] = (wordMap[w] || 0) + 1;
+      }
+    });
+  });
+  const topWords = Object.entries(wordMap).sort((a,b) => b[1]-a[1]).slice(0, 5);
+  topWords.forEach(([w, c]) => items.push({ kind:'mot', label:w, sub:`${c} occurrences`, insert:w }));
+
+  if(!items.length){ host.classList.remove('show'); return; }
+
+  acItems = items;
+  acSelectedIdx = -1;
+
+  let html = '';
+  const grouped = { num: items.filter(i => i.kind === 'num'), mot: items.filter(i => i.kind === 'mot') };
+  if(grouped.num.length){
+    html += `<div class="autocomplete-section"><div class="autocomplete-section-title">Numéros d'articles</div>`;
+    html += grouped.num.map((it, i) => `
+      <div class="autocomplete-item" data-idx="${i}" data-insert="${esc(it.insert)}">
+        <span class="ac-num">${esc(it.insert)}</span>
+        <span class="ac-text">${esc(it.sub||'')}</span>
+        <span class="ac-kind">article</span>
+      </div>`).join('');
+    html += `</div>`;
+  }
+  if(grouped.mot.length){
+    const offset = grouped.num.length;
+    html += `<div class="autocomplete-section"><div class="autocomplete-section-title">Mots-clés</div>`;
+    html += grouped.mot.map((it, i) => `
+      <div class="autocomplete-item" data-idx="${offset + i}" data-insert="${esc(it.insert)}">
+        <span class="ac-num">${esc(it.label)}</span>
+        <span class="ac-text">${esc(it.sub||'')}</span>
+        <span class="ac-kind">mot</span>
+      </div>`).join('');
+    html += `</div>`;
+  }
+
+  host.innerHTML = html;
+  host.classList.add('show');
+  $('searchInput').setAttribute('aria-expanded', 'true');
+
+  host.querySelectorAll('.autocomplete-item').forEach(item => {
+    item.addEventListener('click', () => {
+      $('searchInput').value = item.dataset.insert;
+      hideAutocomplete();
+      state.query = item.dataset.insert;
+      doSearch();
+    });
+  });
+}
+
+function hideAutocomplete(){
+  $('autocomplete').classList.remove('show');
+  $('searchInput').setAttribute('aria-expanded', 'false');
+  acSelectedIdx = -1;
+}
+
+/* =========================================================================
+   URL SYNC
+   ========================================================================= */
+function syncURL(){
+  const params = new URLSearchParams();
+  if(state.query) params.set('q', state.query);
+  if(state.facets.etat.size) params.set('etat', Array.from(state.facets.etat).join(','));
+  if(state.facets.livre.size) params.set('livre', Array.from(state.facets.livre).join(','));
+  if(state.facets.titre.size) params.set('titre', Array.from(state.facets.titre).join(','));
+  if(state.sort !== 'pertinence') params.set('tri', state.sort);
+  if(state.page > 1) params.set('p', state.page);
+  const qs = params.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+}
+
+function readURL(){
+  const p = new URLSearchParams(location.search);
+  if(p.get('q')){ state.query = p.get('q'); $('searchInput').value = state.query; }
+  if(p.get('etat')) state.facets.etat = new Set(p.get('etat').split(','));
+  if(p.get('livre')) state.facets.livre = new Set(p.get('livre').split(','));
+  if(p.get('titre')) state.facets.titre = new Set(p.get('titre').split(','));
+  if(p.get('tri')) { state.sort = p.get('tri'); $('sortSelect').value = state.sort; }
+  if(p.get('p')) state.page = parseInt(p.get('p')) || 1;
+}
+
+/* =========================================================================
+   COPIE / EXPORT
+   ========================================================================= */
+async function copyToClipboard(text){
+  try {
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch(e){ return false; }
+}
+
+function formatArticleText(a){
+  const dateStr = a.dateDebut ? new Date(a.dateDebut * 1000).toLocaleDateString('fr-FR') : '';
+  return [
+    `Article ${a.num} (${a.etat})`,
+    a.hierarchie ? `Hiérarchie : ${a.hierarchie}` : '',
+    '', a.texte, '',
+    dateStr ? `En vigueur depuis : ${dateStr}` : '',
+    a.ref ? `Référence : ${a.ref}` : '',
+    '', '— Source : Code pénal français (données ouvertes DILA / Légifrance) —'
+  ].filter(l => l !== '').join('\n').trim();
+}
+
+async function copyArticle(idx, btn){
+  const a = state.filtered[idx];
+  if(!a) return;
+  const ok = await copyToClipboard(formatArticleText(a));
+  if(ok){
+    const original = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = '✅ Copié';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = original; }, 1600);
+    showToast('Article copié', 'ok');
+  }
+}
+
+async function copyCurrentPage(){
+  const start = (state.page - 1) * PER_PAGE;
+  const slice = state.filtered.slice(start, start + PER_PAGE);
+  if(!slice.length){ showToast('Aucun article à copier', 'err'); return; }
+  const text = slice.map(a => formatArticleText(a)).join('\n\n' + '─'.repeat(60) + '\n\n');
+  const ok = await copyToClipboard(text);
+  showToast(ok ? `${slice.length} articles copiés` : 'Erreur de copie', ok ? 'ok' : 'err');
+}
+
+function exportCSV(){
+  const list = state.filtered;
+  if(!list.length){ showToast('Aucun résultat à exporter', 'err'); return; }
+  const headers = ['Numéro','État','Livre','Titre','Hiérarchie complète','Texte','Date début','Référence','Score'];
+  const rows = list.map(a => [
+    a.num, a.etat, a.livre, a.titreHier, a.hierarchie, a.texte,
+    a.dateDebut ? new Date(a.dateDebut * 1000).toLocaleDateString('fr-FR') : '',
+    a.ref, (a._score||0).toFixed(2)
+  ]);
+  const csvEscape = v => {
+    const s = String(v == null ? '' : v);
+    return (s.includes(';') || s.includes('"') || s.includes('\n')) ? '"' + s.replace(/"/g,'""') + '"' : s;
+  };
+  const csv = '\ufeff' + [headers, ...rows].map(r => r.map(csvEscape).join(';')).join('\r\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8' });
+  const now = new Date();
+  const ts = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `code_penal_${ts}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast(`CSV exporté (${list.length} articles)`, 'ok');
+}
+
+async function shareResults(){
+  try {
+    await copyToClipboard(location.href);
+    showToast('Lien copié dans le presse-papier', 'ok');
+  } catch(e){
+    showToast('Erreur de partage', 'err');
+  }
+}
+
+/* =========================================================================
+   ÉVÉNEMENTS
+   ========================================================================= */
+$('searchBtn').addEventListener('click', () => {
+  state.query = $('searchInput').value;
+  hideAutocomplete();
+  doSearch();
+});
+
+$('searchInput').addEventListener('input', () => {
+  state.query = $('searchInput').value;
+  showAutocomplete();
+});
+
+$('searchInput').addEventListener('keydown', e => {
+  const host = $('autocomplete');
+  const isOpen = host.classList.contains('show');
+
+  if(e.key === 'Escape'){
+    if(isOpen){ hideAutocomplete(); e.preventDefault(); }
+    return;
+  }
+  if(e.key === 'Enter'){
+    if(isOpen && acSelectedIdx >= 0){
+      const item = host.querySelectorAll('.autocomplete-item')[acSelectedIdx];
+      if(item){
+        $('searchInput').value = item.dataset.insert;
+        state.query = item.dataset.insert;
+      }
+    } else {
+      state.query = $('searchInput').value;
+    }
+    hideAutocomplete();
+    doSearch();
+    e.preventDefault();
+  }
+  if(e.key === 'ArrowDown' && isOpen){
+    const items = host.querySelectorAll('.autocomplete-item');
+    if(items.length){
+      acSelectedIdx = Math.min(acSelectedIdx + 1, items.length - 1);
+      items.forEach((it, i) => it.classList.toggle('selected', i === acSelectedIdx));
+      e.preventDefault();
+    }
+  }
+  if(e.key === 'ArrowUp' && isOpen){
+    const items = host.querySelectorAll('.autocomplete-item');
+    if(items.length){
+      acSelectedIdx = Math.max(acSelectedIdx - 1, 0);
+      items.forEach((it, i) => it.classList.toggle('selected', i === acSelectedIdx));
+      e.preventDefault();
+    }
+  }
+});
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('.search-bar')) hideAutocomplete();
+});
+
+$('sortSelect').addEventListener('change', e => {
+  state.sort = e.target.value;
+  doSearch();
+});
+
+$('exportCsvBtn').addEventListener('click', exportCSV);
+$('copyAllBtn').addEventListener('click', copyCurrentPage);
+$('shareBtn').addEventListener('click', shareResults);
+$('printBtn').addEventListener('click', () => window.print());
+
+$('clearHistory').addEventListener('click', () => {
+  state.history = [];
+  saveHistory();
+  renderHistory();
+  showToast('Historique effacé', 'info');
+});
+
+$('clearFavoris').addEventListener('click', () => {
+  state.favoris = new Set();
+  saveFavoris();
+  renderFavoris();
+  renderResults();
+  showToast('Favoris effacés', 'info');
+});
+
+// Syntax hint click → insert into search
+document.querySelectorAll('.syntax-hint code, .modal-body code[data-insert]').forEach(el => {
+  el.addEventListener('click', () => {
+    const ins = el.dataset.insert;
+    if(!ins) return;
+    const inp = $('searchInput');
+    inp.value = (inp.value ? inp.value + ' ' : '') + ins;
+    inp.focus();
+    hideAutocomplete();
+  });
+});
+
+// Modal aide
+$('helpBtn').addEventListener('click', () => $('helpModal').classList.add('show'));
+$('helpClose').addEventListener('click', () => $('helpModal').classList.remove('show'));
+$('helpModal').addEventListener('click', e => {
+  if(e.target === $('helpModal')) $('helpModal').classList.remove('show');
+});
+
+// Raccourcis clavier globaux
+document.addEventListener('keydown', e => {
+  // Ne pas intercepter si dans un input
+  const inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+
+  if(e.key === '/' && !inInput){
+    e.preventDefault();
+    $('searchInput').focus();
+    $('searchInput').select();
+  }
+  if(e.key === '?' && !inInput){
+    e.preventDefault();
+    $('helpModal').classList.add('show');
+  }
+  if((e.ctrlKey || e.metaKey) && e.key === 'k'){
+    e.preventDefault();
+    $('searchInput').value = '';
+    state.query = '';
+    doSearch();
+  }
+});
+
+/* =========================================================================
+   BOOT
+   ========================================================================= */
+(async function boot(){
+  loadHistory();
+  loadFavoris();
+  readURL();
+  renderHistory();
+  renderFavoris();
+  await loadArticles();
+  if(state.query) doSearch();
+  else {
+    // Recherche par défaut pour montrer un résultat
+    state.query = 'vol';
+    $('searchInput').value = 'vol';
+    doSearch();
+  }
+})();
+</script>
+</body>
+</html>
