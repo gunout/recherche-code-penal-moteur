@@ -34,7 +34,6 @@
 <!-- Badges communauté -->
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
 ![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?style=flat-square&logo=conventionalcommits&logoColor=white)
-![Issues](https://img.shields.io/badge/issues-ouvertes-blue?style=flat-square&logo=github)
 
 ---
 
@@ -125,9 +124,9 @@ Un fichier HTML unique, sans build ni dépendance, qui :
 
 ## 🚀 Démo
 
-Aucune démo en ligne officielle n'est maintenue. Pour tester localement, ouvrez simplement `moteur.html` dans un navigateur moderne.
+Aucune démo en ligne officielle n'est maintenue pour le moment — mais le fichier est directement déployable sur **GitHub Pages** (voir plus bas).
 
-> 💡 **Astuce GitHub Pages** : poussez le fichier `index.html` (renommage de `moteur.html`) à la racine du dépôt, activez Pages dans **Settings → Pages**, et votre moteur sera accessible à l'URL `https://<utilisateur>.github.io/<repo>/`.
+Pour tester localement, ouvrez simplement `index.html` dans un navigateur moderne.
 
 ---
 
@@ -138,7 +137,7 @@ Aucune démo en ligne officielle n'est maintenue. Pour tester localement, ouvrez
 ```bash
 git clone https://github.com/<votre-compte>/<votre-repo>.git
 cd <votre-repo>
-# Ouvrez moteur.html dans votre navigateur
+# Ouvrez index.html dans votre navigateur
 ```
 
 ![No build](https://img.shields.io/badge/build-aucun-success?style=flat-square)
@@ -158,14 +157,15 @@ python -m http.server 8000
 npx serve .
 ```
 
-Puis ouvrez `http://localhost:8000/moteur.html`.
+Puis ouvrez `http://localhost:8000/index.html`.
 
 ### Option 3 — GitHub Pages
 
-1. Renommez `moteur.html` en `index.html`
-2. Committez et poussez
-3. Activez **Settings → Pages → Source : main / root**
-4. C'est en ligne 🎉
+1. Committez et poussez `index.html` à la racine du dépôt
+2. Activez **Settings → Pages → Source : main / (root)**
+3. C'est en ligne 🎉 à l'adresse `https://<votre-compte>.github.io/<votre-repo>/`
+
+> 💡 **Astuce** : ajoutez un fichier `.nojekyll` (vide) à la racine pour accélérer le déploiement et éviter tout traitement Jekyll inutile.
 
 ---
 
@@ -230,7 +230,7 @@ Si aucun résultat exact n'est trouvé pour une requête composée de mots oblig
 
 - **HTML/CSS/JS vanilla** — aucune dépendance externe
 - **CSS moderne** : variables, grid, flexbox, `backdrop-filter`
-- **JS ES2019+** : `Set`, `Map`, `async/await`, `fetch`, `IntersectionObserver` (non utilisé ici mais supporté)
+- **JS ES2019+** : `Set`, `Map`, `async/await`, `fetch`, `IntersectionObserver`
 
 ### Pipeline de recherche
 
@@ -313,9 +313,10 @@ Rechargez ou partagez le lien : l'état est restauré automatiquement.
 
 ```text
 .
-├── moteur.html      # Application complète (HTML + CSS + JS inline)
-├── README.md        # Ce fichier
-└── LICENSE          # MIT
+├── index.html      # Application complète (HTML + CSS + JS inline)
+├── README.md       # Ce fichier
+├── LICENSE         # MIT
+└── .nojekyll       # (optionnel) désactive Jekyll sur GitHub Pages
 ```
 
 L'application est volontairement monolithique pour faciliter le déploiement et l'audit.
