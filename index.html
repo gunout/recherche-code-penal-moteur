@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Recherche avancée — Code pénal français</title>
 <meta name="description" content="Moteur de recherche avancé dans le Code pénal français. Syntaxe booléenne, recherche floue, filtres par facettes.">
 <style>
@@ -59,7 +59,6 @@ kbd{
 
 /* LAYOUT */
 .layout{max-width:1400px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
-@media(max-width:1024px){.layout{grid-template-columns:1fr}}
 
 /* SIDEBAR */
 .sidebar{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
@@ -255,20 +254,244 @@ kbd{
 .footer-col a:hover{color:var(--primary);text-decoration:underline}
 .footer-bottom{max-width:1400px;margin:0 auto;padding-top:18px;border-top:1px solid var(--grey-200);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.76rem;color:var(--grey-500)}
 
-@media(max-width:768px){
-  .search-hero{padding:20px 18px 24px}
-  .search-hero h1{font-size:1.15rem}
-  .search-input{padding:12px 96px 12px 42px;font-size:.94rem}
-  .search-btn{padding:8px 14px;font-size:.8rem}
-  .article{padding:14px}
-  .article-head{flex-direction:column;align-items:flex-start}
-  .layout{padding:16px}
-}
 @media print{
   .site-header,.search-hero,.toolbar,.pagination,.site-footer,.article-actions,.toast,.info-bar,.sidebar,.status-banner,.suggestions,.results-bar .sort-select{display:none!important}
   .layout{display:block}
   .article{break-inside:avoid;border-left:2px solid #000;box-shadow:none}
   body{background:#fff}
+}
+
+/* =========================================================================
+   ADAPTATION MULTI-ÉCRANS — téléphone / tablette / desktop
+   ========================================================================= */
+
+/* --- Anti-débordement global --- */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, video, canvas { max-width: 100%; height: auto; }
+
+/* --- Optimisations tactiles (mobile) --- */
+button, a, input, select, label, summary,
+.facet-item, .chip, .suggestion-btn, .page-btn, .icon-btn, .btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* --- Zones tactiles minimales (WCAG 2.5.5) --- */
+.chip, .suggestion-btn, .btn, .icon-btn, .search-btn { min-height: 36px; }
+.page-btn { min-height: 40px; min-width: 40px; }
+
+/* --- Safe area (encoches iPhone / Dynamic Island) --- */
+.site-header-inner, .info-bar, .layout, .footer-inner, .footer-bottom {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+.site-footer { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+
+/* --- Anti-débordement des longs mots --- */
+.article-text, .article-hierarchy, .facet-item label, .side-card h3 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.sidebar { min-width: 0; }
+
+/* --- Titre fluide --- */
+.search-hero h1 { font-size: clamp(1.1rem, 2.5vw + 0.5rem, 1.5rem); }
+
+/* ---------- Tablettes larges / petits laptops ---------- */
+@media (max-width: 1200px) {
+  .layout { grid-template-columns: 240px 1fr; gap: 20px; }
+}
+
+/* ---------- Tablettes (paysage et portrait large) ---------- */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 18px 16px;
+    gap: 16px;
+  }
+  /* Le contenu passe AVANT la sidebar */
+  .main { order: 1; }
+  .sidebar {
+    order: 2;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .side-card { margin-bottom: 0; }
+  .facet-group { max-height: 160px; }
+}
+
+/* ---------- Tablettes portrait & grands téléphones ---------- */
+@media (max-width: 768px) {
+  body { font-size: 15px; }
+
+  .site-header-inner { padding: 12px 16px; gap: 12px; }
+  .site-nav { gap: 14px; font-size: .82rem; }
+  .header-help { display: none; }
+
+  .search-hero { padding: 22px 18px 24px; border-radius: 10px; }
+  .search-hero p { font-size: .84rem; margin-bottom: 14px; }
+
+  /* Barre de recherche : empilement vertical input + bouton */
+  .search-input-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px;
+    gap: 6px;
+  }
+  .search-input-wrap .icon-search { display: none; }
+  .search-input {
+    padding: 12px 14px;
+    font-size: .95rem;
+    background: var(--grey-100);
+    border-radius: 8px;
+  }
+  .search-btn {
+    position: static;
+    transform: none;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: .9rem;
+    border-radius: 8px;
+  }
+
+  .autocomplete { max-height: 60vh; border-radius: 8px; }
+
+  /* Barre d'outils : grille 2 colonnes */
+  .toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+  .toolbar-label { grid-column: 1 / -1; }
+  .sort-select { grid-column: 1 / -1; width: 100%; }
+  .toolbar-spacer { display: none; }
+  .toolbar .btn { justify-content: center; padding: 10px; font-size: .8rem; }
+
+  /* Résultats */
+  .results-bar { flex-direction: column; align-items: flex-start; gap: 6px; padding: 8px 0; }
+  .results-count { font-size: .84rem; }
+
+  .article { padding: 14px 16px; }
+  .article-number { font-size: .95rem; }
+  .article-text { font-size: .88rem; line-height: 1.65; }
+  .article-meta { font-size: .72rem; gap: 10px; }
+
+  /* Aide syntaxe : défilement horizontal type « tab bar » */
+  .syntax-hint {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    margin-right: -18px;
+    padding-right: 18px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .syntax-hint::-webkit-scrollbar { display: none; }
+  .syntax-hint code, .syntax-hint .chip { flex: 0 0 auto; }
+}
+
+/* ---------- Téléphones (portrait) ---------- */
+@media (max-width: 640px) {
+  .layout { padding: 14px 12px; gap: 12px; }
+  .site-header-inner { padding: 10px 12px; gap: 10px; }
+  .logo-icon { width: 36px; height: 36px; font-size: 1rem; }
+  .logo-text .name { font-size: .92rem; }
+  .logo-text .tagline { font-size: .68rem; }
+  .site-nav { display: none; }
+
+  .info-bar { font-size: .7rem; padding: 6px 12px; }
+
+  .sidebar { grid-template-columns: 1fr; }
+
+  .search-hero { padding: 18px 14px 20px; }
+
+  /* Actions article : boutons pleine largeur côte à côte */
+  .article-actions { width: 100%; display: flex; gap: 6px; }
+  .article-actions .icon-btn { flex: 1; justify-content: center; }
+
+  /* Pagination compacte */
+  .pagination { gap: 4px; margin: 18px 0; }
+  .page-btn { min-width: 36px; height: 36px; padding: 0 8px; font-size: .8rem; }
+
+  /* Footer : 2 colonnes */
+  .footer-inner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 8px; font-size: .72rem; }
+
+  /* Modale aide : plein écran en bas */
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 14px 14px 0 0;
+  }
+  .modal-head { padding: 16px 18px; }
+  .modal-body { padding: 16px 18px 24px; }
+  .syntax-table { font-size: .76rem; }
+  .syntax-table th, .syntax-table td { padding: 6px 8px; }
+
+  /* Toast pleine largeur en bas */
+  .toast {
+    left: 12px; right: 12px; bottom: 12px;
+    transform: translateY(80px);
+    max-width: none;
+  }
+  .toast.show { transform: translateY(0); }
+}
+
+/* ---------- Téléphones compacts ---------- */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+  .layout { padding: 12px 10px; gap: 10px; }
+  .site-header-inner { padding: 8px 10px; }
+
+  .search-hero { padding: 16px 12px 18px; border-radius: 8px; margin-bottom: 14px; }
+  .search-hero h1 { font-size: 1.05rem; line-height: 1.3; }
+  .search-hero p { font-size: .78rem; }
+
+  .toolbar { padding: 8px; gap: 6px; }
+  .toolbar-label { font-size: .7rem; }
+  .toolbar .btn { padding: 8px; font-size: .74rem; gap: 4px; }
+  .sort-select { font-size: .8rem; padding: 9px 10px; }
+
+  .side-card { padding: 12px; border-radius: 8px; }
+  .side-card h3 { font-size: .72rem; margin-bottom: 8px; }
+  .facet-item { font-size: .78rem; padding: 6px; }
+
+  .article { padding: 12px; border-radius: 6px; }
+  .article-hierarchy { font-size: .72rem; padding: 5px 8px; }
+  .article-text { font-size: .85rem; }
+  .badge { font-size: .62rem; padding: 2px 8px; }
+  .icon-btn { font-size: .7rem; padding: 6px 8px; }
+
+  .empty-state { padding: 32px 16px; }
+  .empty-state .icon { font-size: 2rem; }
+  .empty-state h3 { font-size: .92rem; }
+  .empty-state p { font-size: .8rem; }
+
+  .suggestion-btn { font-size: .74rem; padding: 6px 10px; }
+
+  .footer-inner { grid-template-columns: 1fr; gap: 16px; }
+  .footer-col h4 { font-size: .72rem; }
+}
+
+/* ---------- Très petits téléphones ---------- */
+@media (max-width: 380px) {
+  .logo-icon { width: 32px; height: 32px; font-size: .9rem; }
+  .logo-text .name { font-size: .85rem; }
+  .logo-text .tagline { display: none; }
+
+  .search-hero { padding: 14px 10px 16px; }
+  .search-hero h1 { font-size: .98rem; }
+
+  .toolbar .btn { font-size: .68rem; padding: 7px 6px; }
+  .page-btn { min-width: 32px; height: 32px; font-size: .75rem; padding: 0 6px; }
 }
 </style>
 </head>
@@ -518,16 +741,13 @@ const HISTORY_MAX = 15;
 const state = {
   articles: [],
   filtered: [],
-  // requête parsée
   parsed: { must:[], mustNot:[], should:[], phrases:[], prefix:[], numero:null, raw:'' },
   query: '',
-  // facettes
   facets: {
-    etat: new Set(),   // {VIGUEUR, ABROGE}
+    etat: new Set(),
     livre: new Set(),
     titre: new Set()
   },
-  // facettes disponibles calculées
   facetsAvailable: { etat:{}, livre:{}, titre:{} },
   sort: 'pertinence',
   page: 1,
@@ -544,7 +764,6 @@ const esc = s => String(s||'').replace(/[&<>"']/g, c => ({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
 
-/** Normalise : minuscules + suppression accents */
 function normalize(str){
   return String(str||'')
     .toLowerCase()
@@ -552,7 +771,6 @@ function normalize(str){
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-/** Highlight tous les termes trouvés dans le texte */
 function highlight(text, parsed){
   const safe = esc(text);
   const terms = new Set();
@@ -566,16 +784,13 @@ function highlight(text, parsed){
   let out = safe;
   Array.from(terms).sort((a,b) => b.length - a.length).forEach(term => {
     if(term.length < 2) return;
-    // Escape regex
     const t = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // Match accents-insensitive
     const re = new RegExp(buildAccentInsensitiveRegex(t), 'gi');
     out = out.replace(re, m => '<mark>' + m + '</mark>');
   });
   return out;
 }
 
-/** Regex insensible aux accents */
 function buildAccentInsensitiveRegex(str){
   const map = {'a':'[aàâä]','e':'[eéèêë]','i':'[iîï]','o':'[oôö]','u':'[uùûü]','c':'[cç]','y':'[yÿ]'};
   return str.split('').map(ch => {
@@ -584,7 +799,6 @@ function buildAccentInsensitiveRegex(str){
   }).join('');
 }
 
-/** Levenshtein */
 function levenshtein(a, b){
   a = normalize(a); b = normalize(b);
   if(a === b) return 0;
@@ -615,16 +829,6 @@ function showToast(msg, type = 'info'){
 /* =========================================================================
    PARSER DE REQUÊTE
    ========================================================================= */
-/**
- * Grammaire supportée :
- *   - mot1 mot2           → must: [mot1, mot2]
- *   - "phrase exacte"     → phrases: [phrase exacte]
- *   - mot1 AND mot2       → must
- *   - mot1 OR mot2        → should
- *   - mot1 NOT mot2 / -mot2 → mustNot
- *   - préfixe*            → prefix
- *   - art:311-1 / num:311-1 → numero
- */
 function parseQuery(raw){
   const parsed = { must:[], mustNot:[], should:[], phrases:[], prefix:[], numero:null, raw:raw.trim() };
   if(!parsed.raw) return parsed;
@@ -642,7 +846,6 @@ function parseQuery(raw){
     const val = tk.value.trim();
     if(!val) continue;
 
-    // Détection art: / num:
     const artMatch = val.match(/^(?:art|num|article):(.+)$/i);
     if(artMatch){
       parsed.numero = artMatch[1].trim();
@@ -650,7 +853,6 @@ function parseQuery(raw){
       continue;
     }
 
-    // Préfixe *
     if(tk.type === 'term' && val.endsWith('*') && val.length > 1){
       const p = val.slice(0, -1).toLowerCase();
       if(currentOp === 'NOT') parsed.mustNot.push(p);
@@ -660,7 +862,6 @@ function parseQuery(raw){
       continue;
     }
 
-    // Phrase
     if(tk.type === 'phrase'){
       const p = val.toLowerCase();
       if(currentOp === 'NOT') parsed.mustNot.push(p);
@@ -670,7 +871,6 @@ function parseQuery(raw){
       continue;
     }
 
-    // Terme simple
     const t = val.toLowerCase();
     if(currentOp === 'NOT') parsed.mustNot.push(t);
     else if(currentOp === 'OR') parsed.should.push(t);
@@ -688,11 +888,9 @@ function tokenize(q){
   const n = q.length;
 
   while(i < n){
-    // Skip whitespace
     while(i < n && /\s/.test(q[i])) i++;
     if(i >= n) break;
 
-    // Check operators (word boundary)
     const rest = q.slice(i).toUpperCase();
     if(rest.match(/^(AND|OR|NOT)\b/)){
       const op = rest.match(/^(AND|OR|NOT)\b/)[1];
@@ -701,14 +899,12 @@ function tokenize(q){
       continue;
     }
 
-    // Leading minus = NOT
     if(q[i] === '-'){
       tokens.push({ type:'op', value:'NOT' });
       i++;
       continue;
     }
 
-    // Quoted phrase
     if(q[i] === '"'){
       const end = q.indexOf('"', i + 1);
       if(end > i){
@@ -718,7 +914,6 @@ function tokenize(q){
       }
     }
 
-    // Regular term
     let term = '';
     while(i < n && !/\s/.test(q[i]) && q[i] !== '"'){
       term += q[i++];
@@ -735,7 +930,6 @@ const K1 = 1.2;
 const B = 0.75;
 
 function scoreArticle(article, parsed){
-  // Filtres numéro
   if(parsed.numero){
     const numClean = article.num.replace(/\./g,'').replace(/\s/g,'').toLowerCase();
     const qClean = parsed.numero.replace(/\./g,'').replace(/\s/g,'').toLowerCase();
@@ -748,11 +942,10 @@ function scoreArticle(article, parsed){
   const titleNorm = normalize(article.titre + ' ' + article.hierarchie);
   const numNorm = normalize(article.num);
   const docLen = textNorm.split(/\s+/).length;
-  const avgLen = 80;   // approximation
+  const avgLen = 80;
 
   let score = 0;
 
-  // Mots obligatoires (must) : tous doivent être présents
   for(const term of parsed.must){
     const inText = countOccurrences(textNorm, term);
     const inTitle = countOccurrences(titleNorm, term);
@@ -760,21 +953,19 @@ function scoreArticle(article, parsed){
     if(inText + inTitle + inNum === 0) return 0;
 
     const tf = inText + inTitle * 3 + inNum * 5;
-    const idf = 1; // pas d'IDF réel ici (tout terme rare compte pareil)
+    const idf = 1;
     score += idf * (tf * (K1 + 1)) / (tf + K1 * (1 - B + B * (docLen / avgLen)));
   }
 
-  // Phrases : doivent être présentes textuellement
   for(const phrase of parsed.phrases){
     const p = normalize(phrase);
     if(textNorm.includes(p) || titleNorm.includes(p)){
       score += 50;
     } else {
-      return 0;   // phrase obligatoire
+      return 0;
     }
   }
 
-  // Préfixes
   for(const prefix of parsed.prefix){
     const p = normalize(prefix);
     const re = new RegExp('\\b' + p, 'i');
@@ -782,7 +973,6 @@ function scoreArticle(article, parsed){
     score += 10;
   }
 
-  // Mots optionnels (OR) : bonus si présents
   if(parsed.should.length){
     let anyMatch = false;
     for(const term of parsed.should){
@@ -792,7 +982,6 @@ function scoreArticle(article, parsed){
     if(!anyMatch && parsed.must.length === 0 && parsed.phrases.length === 0) return 0;
   }
 
-  // Mots à exclure
   for(const term of parsed.mustNot){
     if(textNorm.includes(term) || titleNorm.includes(term) || numNorm.includes(term)) return 0;
   }
@@ -814,7 +1003,6 @@ function countOccurrences(haystack, needle){
 /* =========================================================================
    RECHERCHE FLOUE
    ========================================================================= */
-/** Cherche les termes flous dans un mot unique : renvoie le terme corrigé ou null */
 function fuzzyCorrect(term, dictionary){
   let best = null, bestDist = 3;
   const t = normalize(term);
@@ -845,7 +1033,6 @@ function extractSnippet(text, parsed, length = 260){
   let bestPos = 0;
   let bestCount = 0;
 
-  // Fenêtre glissante
   for(let i = 0; i < normText.length - length; i += 20){
     const win = normText.slice(i, i + length);
     let c = 0;
@@ -1081,19 +1268,16 @@ function doSearch(){
   const list = [];
 
   for(const art of state.articles){
-    // Filtres facettes
     if(state.facets.etat.size && !state.facets.etat.has(art.etat)) continue;
     if(state.facets.livre.size && !state.facets.livre.has(art.livre)) continue;
     if(state.facets.titre.size && !state.facets.titre.has(art.titreHier)) continue;
 
-    // Score
     const score = scoreArticle(art, state.parsed);
     if(score > 0){
       list.push({ ...art, _score: score });
     }
   }
 
-  // Fallback flou si 0 résultats avec must
   if(!list.length && state.parsed.must.length && !state.parsed.numero){
     const dict = buildDictionary();
     const corrected = [];
@@ -1116,7 +1300,6 @@ function doSearch(){
     }
   }
 
-  // Tri
   applySort(list);
 
   state.filtered = list;
@@ -1212,7 +1395,6 @@ function renderArticle(a, idx){
   const badge = a.etat === 'VIGUEUR'
     ? '<span class="badge badge-success">● En vigueur</span>'
     : '<span class="badge badge-error">● Abrogé</span>';
-  const scoreBadge = a._score >= 100 ? '' : '';
   const dateStr = a.dateDebut
     ? new Date(a.dateDebut * 1000).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
     : '';
@@ -1307,13 +1489,11 @@ function showAutocomplete(){
   const items = [];
   const normQ = normalize(q);
 
-  // Numéros d'articles
   const numMatches = state.articles
     .filter(a => a.num.toLowerCase().includes(q.toLowerCase()))
     .slice(0, 5);
   numMatches.forEach(a => items.push({ kind:'num', label:`Article ${a.num}`, sub:a.titre, insert:a.num }));
 
-  // Termes fréquents
   const wordMap = {};
   state.articles.forEach(a => {
     normalize(a.texte).split(/\s+/).forEach(w => {
@@ -1568,7 +1748,6 @@ $('clearFavoris').addEventListener('click', () => {
   showToast('Favoris effacés', 'info');
 });
 
-// Syntax hint click → insert into search
 document.querySelectorAll('.syntax-hint code, .modal-body code[data-insert]').forEach(el => {
   el.addEventListener('click', () => {
     const ins = el.dataset.insert;
@@ -1580,16 +1759,13 @@ document.querySelectorAll('.syntax-hint code, .modal-body code[data-insert]').fo
   });
 });
 
-// Modal aide
 $('helpBtn').addEventListener('click', () => $('helpModal').classList.add('show'));
 $('helpClose').addEventListener('click', () => $('helpModal').classList.remove('show'));
 $('helpModal').addEventListener('click', e => {
   if(e.target === $('helpModal')) $('helpModal').classList.remove('show');
 });
 
-// Raccourcis clavier globaux
 document.addEventListener('keydown', e => {
-  // Ne pas intercepter si dans un input
   const inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
 
   if(e.key === '/' && !inInput){
@@ -1621,7 +1797,6 @@ document.addEventListener('keydown', e => {
   await loadArticles();
   if(state.query) doSearch();
   else {
-    // Recherche par défaut pour montrer un résultat
     state.query = 'vol';
     $('searchInput').value = 'vol';
     doSearch();
