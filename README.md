@@ -482,15 +482,6 @@ SOFTWARE.
 
 ---
 
-## 📬 Contact
-
-- **Dépôt** : [github.com/gunout/recherche-code-penal-moteur](https://github.com/gunout/recherche-code-penal-moteur)
-- **Démo en ligne** : [gunout.github.io/recherche-code-penal-moteur](https://gunout.github.io/recherche-code-penal-moteur/)
-- **Issues** : [github.com/gunout/recherche-code-penal-moteur/issues](https://github.com/gunout/recherche-code-penal-moteur/issues)
-- **Discussions** : [github.com/gunout/recherche-code-penal-moteur/discussions](https://github.com/gunout/recherche-code-penal-moteur/discussions)
-
----
-
 <div align="center">
 
 ⚖️ **Outil pédagogique non officiel** — Non affilié à l'État français
