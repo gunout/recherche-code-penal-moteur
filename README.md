@@ -1,5 +1,43 @@
 # ⚖️ Recherche avancée — Code pénal français
 
+<!-- Badges principaux -->
+![Version](https://img.shields.io/badge/version-1.0.0-002395?style=for-the-badge&labelColor=FFFFFF)
+![Licence](https://img.shields.io/badge/licence-MIT-ED2939?style=for-the-badge&labelColor=FFFFFF)
+![Made in France](https://img.shields.io/badge/Made_in-France-002395?style=for-the-badge&labelColor=FFFFFF&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj48cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzAwMjM5NSIvPjxyZWN0IHdpZHRoPSI5MDAiIGhlaWdodD0iNDAwIiB5PSIxMDAiIGZpbGw9IiNmZmYiLz48cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjIwMCIgeT0iNDAwIiBmaWxsPSIjZWQyOTM5Ii8+PC9zdmc+)
+![Statut](https://img.shields.io/badge/statut-actif-2ea44f?style=for-the-badge)
+
+<!-- Badges techniques -->
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![ES2019+](https://img.shields.io/badge/ES-2019%2B-333?style=flat-square&logo=javascript&logoColor=F7DF1E)
+![Zéro dépendance](https://img.shields.io/badge/d%C3%A9pendances-0-brightgreen?style=flat-square)
+![Taille](https://img.shields.io/badge/taille-%3C%20200%20Ko-blue?style=flat-square)
+
+<!-- Badges qualité & conformité -->
+![WCAG 2.1 AA](https://img.shields.io/badge/WCAG_2.1-AA-005A9C?style=flat-square&logo=w3c&logoColor=white)
+![Accessibilité](https://img.shields.io/badge/accessibilit%C3%A9-clavier_+_ARIA-6f42c1?style=flat-square)
+![Responsive](https://img.shields.io/badge/responsive-mobile_%7C_tablette_%7C_desktop-009688?style=flat-square)
+![Open Data](https://img.shields.io/badge/Open_Data-Licence_Ouverte_2.0-ff6f00?style=flat-square)
+
+<!-- Badges écosystème -->
+![Source](https://img.shields.io/badge/source-DILA_%2F_L%C3%A9gifrance-000091?style=flat-square)
+![Dataset](https://img.shields.io/badge/HuggingFace-code--penal-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-pr%C3%AAt-222?style=flat-square&logo=githubpages&logoColor=white)
+
+<!-- Badges navigateurs -->
+![Chrome](https://img.shields.io/badge/Chrome-90%2B-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
+![Firefox](https://img.shields.io/badge/Firefox-88%2B-FF7139?style=flat-square&logo=firefox&logoColor=white)
+![Safari](https://img.shields.io/badge/Safari-14%2B-000000?style=flat-square&logo=safari&logoColor=white)
+![Edge](https://img.shields.io/badge/Edge-90%2B-0078D7?style=flat-square&logo=microsoftedge&logoColor=white)
+
+<!-- Badges communauté -->
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
+![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?style=flat-square&logo=conventionalcommits&logoColor=white)
+![Issues](https://img.shields.io/badge/issues-ouvertes-blue?style=flat-square&logo=github)
+
+---
+
 Moteur de recherche avancé, entièrement côté client, pour explorer le Code pénal français à partir des données ouvertes de la DILA. Interface sobre, accessible et rapide, avec syntaxe booléenne, recherche floue, facettes dynamiques, favoris, historique et export.
 
 > ⚠️ **Outil non officiel** — Ce projet est pédagogique et n'est affilié ni à l'État français, ni à Légifrance, ni à la DILA.
@@ -38,6 +76,10 @@ Un fichier HTML unique, sans build ni dépendance, qui :
 - Affiche les résultats avec snippets contextuels, mise en évidence des termes, et filtres à facettes.
 
 **Aucun serveur, aucune base de données, aucune inscription.**
+
+![Zéro backend](https://img.shields.io/badge/backend-aucun-success?style=flat-square)
+![Zéro tracking](https://img.shields.io/badge/tracking-aucun-success?style=flat-square)
+![Zéro inscription](https://img.shields.io/badge/inscription-aucune-success?style=flat-square)
 
 ---
 
@@ -98,6 +140,9 @@ git clone https://github.com/<votre-compte>/<votre-repo>.git
 cd <votre-repo>
 # Ouvrez moteur.html dans votre navigateur
 ```
+
+![No build](https://img.shields.io/badge/build-aucun-success?style=flat-square)
+![No npm](https://img.shields.io/badge/npm-aucun-success?style=flat-square)
 
 Aucune dépendance, aucun `npm install`, aucun build.
 
@@ -179,6 +224,10 @@ Si aucun résultat exact n'est trouvé pour une requête composée de mots oblig
 
 ### Stack
 
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+
 - **HTML/CSS/JS vanilla** — aucune dépendance externe
 - **CSS moderne** : variables, grid, flexbox, `backdrop-filter`
 - **JS ES2019+** : `Set`, `Map`, `async/await`, `fetch`, `IntersectionObserver` (non utilisé ici mais supporté)
@@ -234,6 +283,11 @@ Rechargez ou partagez le lien : l'état est restauré automatiquement.
 
 ## 📊 Données
 
+![DILA](https://img.shields.io/badge/%C3%A9metteur-DILA-000091?style=flat-square)
+![Légifrance](https://img.shields.io/badge/source-L%C3%A9gifrance-000091?style=flat-square)
+![Licence Ouverte 2.0](https://img.shields.io/badge/licence-Licence_Ouverte_2.0-ff6f00?style=flat-square)
+![Etalab](https://img.shields.io/badge/Etalab-open_data-blue?style=flat-square)
+
 - **Source** : Hugging Face — [`louisbrulenaudet/code-penal`](https://huggingface.co/datasets/louisbrulenaudet/code-penal)
 - **Origine** : DILA (Direction de l'information légale et administrative)
 - **Licence** : Licence Ouverte 2.0 (Etalab)
@@ -270,6 +324,10 @@ L'application est volontairement monolithique pour faciliter le déploiement et 
 
 ## ♿ Accessibilité
 
+![WCAG 2.1 AA](https://img.shields.io/badge/WCAG_2.1-AA-005A9C?style=flat-square&logo=w3c&logoColor=white)
+![ARIA](https://img.shields.io/badge/ARIA-complet-6f42c1?style=flat-square)
+![Clavier](https://img.shields.io/badge/navigation-clavier-6f42c1?style=flat-square)
+
 Ce projet vise la conformité **WCAG 2.1 niveau AA** :
 
 - Structure sémantique HTML5 (`<header>`, `<main>`, `<nav>`, `<article>`)
@@ -286,14 +344,14 @@ Les retours et signalements de problèmes d'accessibilité sont bienvenus via le
 
 ## 🌐 Compatibilité
 
-| Navigateur | Version minimale |
-|---|---|
-| Chrome / Edge | 90+ |
-| Firefox | 88+ |
-| Safari | 14+ |
-| Opera | 76+ |
+| Navigateur | Version minimale | Badge |
+|---|---|---|
+| Chrome / Edge | 90+ | ![Chrome](https://img.shields.io/badge/Chrome-90%2B-4285F4?style=flat-square&logo=googlechrome&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-90%2B-0078D7?style=flat-square&logo=microsoftedge&logoColor=white) |
+| Firefox | 88+ | ![Firefox](https://img.shields.io/badge/Firefox-88%2B-FF7139?style=flat-square&logo=firefox&logoColor=white) |
+| Safari | 14+ | ![Safari](https://img.shields.io/badge/Safari-14%2B-000000?style=flat-square&logo=safari&logoColor=white) |
+| Opera | 76+ | ![Opera](https://img.shields.io/badge/Opera-76%2B-FF1B2D?style=flat-square&logo=opera&logoColor=white) |
 
-**Non supporté** : Internet Explorer (toutes versions).
+**Non supporté** : ![IE](https://img.shields.io/badge/Internet_Explorer-non_support%C3%A9-red?style=flat-square&logo=internetexplorer&logoColor=white)
 
 Fonctionne sur mobile et tablette (design responsive, breakpoint à 768 px et 1024 px).
 
@@ -313,6 +371,8 @@ Fonctionne sur mobile et tablette (design responsive, breakpoint à 768 px et 10
 
 ## 🗺️ Feuille de route
 
+![Roadmap](https://img.shields.io/badge/roadmap-en_cours-orange?style=flat-square)
+
 - [ ] Service worker + cache offline (PWA)
 - [ ] Index inversé + web worker pour la recherche
 - [ ] Comparaison de versions d'articles (diffs)
@@ -325,6 +385,10 @@ Fonctionne sur mobile et tablette (design responsive, breakpoint à 768 px et 10
 ---
 
 ## 🤝 Contribuer
+
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
+![Issues](https://img.shields.io/badge/issues-ouvertes-blue?style=flat-square&logo=github)
+![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?style=flat-square&logo=conventionalcommits&logoColor=white)
 
 Les contributions sont les bienvenues !
 
@@ -359,12 +423,14 @@ Ouvrez une issue en précisant :
 
 ## 📄 Licence
 
+![Licence MIT](https://img.shields.io/badge/licence-MIT-ED2939?style=for-the-badge&labelColor=FFFFFF)
+
 Ce projet est distribué sous licence **MIT** — voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ```text
 MIT License
 
-Copyright (c) 2025 <votre nom>
+Copyright (c) 2026 gunout
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -397,7 +463,6 @@ SOFTWARE.
 - **Etalab** — Licence Ouverte 2.0
 
 ---
-
 
 <div align="center">
 
