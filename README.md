@@ -23,7 +23,7 @@
 <!-- Badges écosystème -->
 ![Source](https://img.shields.io/badge/source-DILA_%2F_L%C3%A9gifrance-000091?style=flat-square)
 ![Dataset](https://img.shields.io/badge/HuggingFace-code--penal-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-pr%C3%AAt-222?style=flat-square&logo=githubpages&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-en_ligne-222?style=flat-square&logo=githubpages&logoColor=white)
 
 <!-- Badges navigateurs -->
 ![Chrome](https://img.shields.io/badge/Chrome-90%2B-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
@@ -34,6 +34,13 @@
 <!-- Badges communauté -->
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
 ![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?style=flat-square&logo=conventionalcommits&logoColor=white)
+
+<!-- Badges dynamiques du dépôt -->
+![Stars](https://img.shields.io/github/stars/gunout/recherche-code-penal-moteur?style=flat-square&logo=github&label=stars)
+![Forks](https://img.shields.io/github/forks/gunout/recherche-code-penal-moteur?style=flat-square&logo=github&label=forks)
+![Issues](https://img.shields.io/github/issues/gunout/recherche-code-penal-moteur?style=flat-square&logo=github&label=issues)
+![Dernier commit](https://img.shields.io/github/last-commit/gunout/recherche-code-penal-moteur?style=flat-square&logo=git&label=dernier%20commit)
+![Taille du repo](https://img.shields.io/github/repo-size/gunout/recherche-code-penal-moteur?style=flat-square&label=taille)
 
 ---
 
@@ -124,9 +131,13 @@ Un fichier HTML unique, sans build ni dépendance, qui :
 
 ## 🚀 Démo
 
-Aucune démo en ligne officielle n'est maintenue pour le moment — mais le fichier est directement déployable sur **GitHub Pages** (voir plus bas).
+L'application est **déployée en ligne** grâce à GitHub Pages :
 
-Pour tester localement, ouvrez simplement `index.html` dans un navigateur moderne.
+### 👉 [**https://gunout.github.io/recherche-code-penal-moteur/**](https://gunout.github.io/recherche-code-penal-moteur/)
+
+Aucune installation, aucune inscription. Ouvrez simplement le lien dans un navigateur moderne.
+
+> 💡 Pour tester localement, ouvrez `index.html` dans un navigateur (ou utilisez un serveur local si votre navigateur bloque `fetch` depuis `file://`).
 
 ---
 
@@ -135,8 +146,8 @@ Pour tester localement, ouvrez simplement `index.html` dans un navigateur modern
 ### Option 1 — Utilisation directe (recommandée)
 
 ```bash
-git clone https://github.com/<votre-compte>/<votre-repo>.git
-cd <votre-repo>
+git clone https://github.com/gunout/recherche-code-penal-moteur.git
+cd recherche-code-penal-moteur
 # Ouvrez index.html dans votre navigateur
 ```
 
@@ -159,7 +170,13 @@ npx serve .
 
 Puis ouvrez `http://localhost:8000/index.html`.
 
-### Option 3 — GitHub Pages
+### Option 3 — Utilisation via GitHub Pages
+
+L'application est déjà déployée à l'adresse :
+
+**🔗 [https://gunout.github.io/recherche-code-penal-moteur/](https://gunout.github.io/recherche-code-penal-moteur/)**
+
+Pour la déployer sur votre propre fork :
 
 1. Committez et poussez `index.html` à la racine du dépôt
 2. Activez **Settings → Pages → Source : main / (root)**
@@ -339,7 +356,7 @@ Ce projet vise la conformité **WCAG 2.1 niveau AA** :
 - Focus visibles et personnalisés (`:focus-visible`)
 - Formulaires étiquetés (`aria-label`, `<label>`)
 
-Les retours et signalements de problèmes d'accessibilité sont bienvenus via les issues.
+Les retours et signalements de problèmes d'accessibilité sont bienvenus via les [issues](https://github.com/gunout/recherche-code-penal-moteur/issues).
 
 ---
 
@@ -388,12 +405,12 @@ Fonctionne sur mobile et tablette (design responsive, breakpoint à 768 px et 10
 ## 🤝 Contribuer
 
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
-![Issues](https://img.shields.io/badge/issues-ouvertes-blue?style=flat-square&logo=github)
+![Issues](https://img.shields.io/github/issues/gunout/recherche-code-penal-moteur?style=flat-square&logo=github&label=issues)
 ![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?style=flat-square&logo=conventionalcommits&logoColor=white)
 
 Les contributions sont les bienvenues !
 
-1. Forkez le dépôt
+1. Forkez le dépôt : [github.com/gunout/recherche-code-penal-moteur](https://github.com/gunout/recherche-code-penal-moteur)
 2. Créez une branche : `git checkout -b feature/ma-fonctionnalite`
 3. Committez : `git commit -m "feat: ajout de X"`
 4. Poussez : `git push origin feature/ma-fonctionnalite`
@@ -413,7 +430,7 @@ Ce projet suit [Conventional Commits](https://www.conventionalcommits.org/) :
 
 ### Signaler un bug
 
-Ouvrez une issue en précisant :
+Ouvrez une [issue](https://github.com/gunout/recherche-code-penal-moteur/issues/new) en précisant :
 
 - Navigateur et version
 - Étapes de reproduction
@@ -426,7 +443,7 @@ Ouvrez une issue en précisant :
 
 ![Licence MIT](https://img.shields.io/badge/licence-MIT-ED2939?style=for-the-badge&labelColor=FFFFFF)
 
-Ce projet est distribué sous licence **MIT** — voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est distribué sous licence **MIT** — voir le fichier [LICENSE](https://github.com/gunout/recherche-code-penal-moteur/blob/main/LICENSE) pour plus de détails.
 
 ```text
 MIT License
@@ -462,6 +479,15 @@ SOFTWARE.
 - **Hugging Face** — hébergement du dataset et API `rows`
 - **@louisbrulenaudet** — mise à disposition du dataset `code-penal`
 - **Etalab** — Licence Ouverte 2.0
+
+---
+
+## 📬 Contact
+
+- **Dépôt** : [github.com/gunout/recherche-code-penal-moteur](https://github.com/gunout/recherche-code-penal-moteur)
+- **Démo en ligne** : [gunout.github.io/recherche-code-penal-moteur](https://gunout.github.io/recherche-code-penal-moteur/)
+- **Issues** : [github.com/gunout/recherche-code-penal-moteur/issues](https://github.com/gunout/recherche-code-penal-moteur/issues)
+- **Discussions** : [github.com/gunout/recherche-code-penal-moteur/discussions](https://github.com/gunout/recherche-code-penal-moteur/discussions)
 
 ---
 
